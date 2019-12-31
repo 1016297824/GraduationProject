@@ -13,15 +13,17 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Product {
+public class Product {                  //产品
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id;                     //ID
 
-    private String name;
+    private String name;                //产品名称
 
-    private double price;
+    private double price;               //单价
 
-    private String unit;
+    private String unit;                //单位
+
+    private double amount;              //数量
 }

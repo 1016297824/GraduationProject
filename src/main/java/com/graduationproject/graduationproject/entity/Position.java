@@ -18,6 +18,8 @@ public class Position {                     //职位
 
     private String name;                    //职位名称
 
+    private String location;                //办公地点
+
     private double basicSalary;             //基本工资
 
     @OneToOne(mappedBy = "position")
