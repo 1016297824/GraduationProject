@@ -13,13 +13,15 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Table {                    //餐桌
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;                     //ID
+    private int id;
 
-    private boolean reserve;            //是否预定
+    private String name;
 
-    private int seat;                   //座位数
+    private double price;
+
+    private String unit;
 }
