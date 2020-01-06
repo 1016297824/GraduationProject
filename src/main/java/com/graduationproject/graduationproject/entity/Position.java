@@ -12,6 +12,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Position {                     //职位
 
+    public static final String superManager = "fg324f68sch156j";
+    public static final String manager = "j5l79g3n1m8lld3x";
+    public static final String commonUser = "n1yi879d6dv2b";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;                         //ID
@@ -21,6 +25,8 @@ public class Position {                     //职位
     private String location;                //办公地点
 
     private double basicSalary;             //基本工资
+
+    private String authority;               //权限
 
     @OneToOne(mappedBy = "position")
     private User user;
