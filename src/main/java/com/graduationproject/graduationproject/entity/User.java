@@ -35,6 +35,6 @@ public class User {                                         //员工
 
     private String idcardno;                                //身份证号码
 
-    @OneToOne
+    @ManyToOne
     private Position position;
 }

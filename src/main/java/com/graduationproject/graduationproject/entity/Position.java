@@ -1,10 +1,12 @@
 package com.graduationproject.graduationproject.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +30,13 @@ public class Position {                     //职位
 
     private String authority;               //权限
 
-    @OneToOne(mappedBy = "position")
-    private User user;
+    @OneToMany(mappedBy = "position")
+    private List<User> userList;
+
+    public Position(String name, String location, double basicSalary, String authority) {
+        this.name = name;
+        this.location = location;
+        this.basicSalary = basicSalary;
+        this.authority = authority;
+    }
 }
