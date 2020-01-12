@@ -44,7 +44,7 @@ public class InitService implements InitializingBean {
         }
 
         if (diningTableService.findAll().isEmpty()) {
-            System.out.println("diningTable is empty");     //测试成功控制台输出“diningTable is empty”
+//            System.out.println("diningTable is empty");     //测试成功控制台输出“diningTable is empty”
 
             diningTableService.initDiningTable();
         }
