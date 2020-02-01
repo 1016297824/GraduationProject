@@ -2,6 +2,7 @@ package com.graduationproject.graduationproject.controller;
 
 import com.graduationproject.graduationproject.component.EncryptorComponent;
 import com.graduationproject.graduationproject.entity.Customer;
+import com.graduationproject.graduationproject.entity.Position;
 import com.graduationproject.graduationproject.entity.Staff;
 import com.graduationproject.graduationproject.entity.User;
 import com.graduationproject.graduationproject.service.CustomerService;
@@ -20,6 +21,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class LoginController {
+
+    // role
+    private static final String customer = "tj78hs1hy6s5v";
+    private static final String superManager = "6h56s3h478f4";
+    private static final String manager = "12yi9i8gnj23";
+    private static final String staff = "ghd5dh8f1bq";
 
     @Autowired
     private CustomerService customerService;
@@ -44,6 +51,7 @@ public class LoginController {
             Staff staff = null;
 
             if (customerService.findByUsername(user.getUsername()) != null) {
+                //System.out.println("Is customer!");          // 顾客登录测试
 
                 customer = customerService.findByUsername(user.getUsername());
 
@@ -53,11 +61,40 @@ public class LoginController {
 
                 }
 
-                Map map = Map.of("username", customer.getUsername(),"role","customer","authority", "");
+                Map map = Map.of("username", customer.getUsername(), "authority", "");
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
+                response.setHeader("role", LoginController.customer);
 
             } else if (staffService.findByUsername(user.getUsername()) != null) {
+                //System.out.println("Is staff!");            // 员工登录测试
+
+                staff = staffService.findByUsername(user.getUsername());
+
+                if (!passwordEncoder.matches(user.getPassword(), staff.getPassword())) {
+
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
+
+                }
+
+                String role = null;
+
+                if (staff.getPosition().getAuthority().equals(Position.superManager)) {
+
+                    role = LoginController.superManager;
+
+                } else if (staff.getPosition().getAuthority().equals(Position.manager)) {
+
+                    role = LoginController.manager;
+
+                } else if (staff.getPosition().getAuthority().equals(Position.staff)) {
+                    role = LoginController.staff;
+                }
+
+                Map map = Map.of("username", staff.getUsername(), "authority", staff.getPosition().getAuthority());
+                String token = encryptorComponent.encrypt(map);
+                response.setHeader("token", token);
+                response.setHeader("role", role);
 
             } else {
 
@@ -66,24 +103,6 @@ public class LoginController {
             }
 
         }
-
-//        Optional.ofNullable(customerService.findByUsername(user.getUsername()))
-//                .or(() -> {
-//                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "用户名不存在！");
-//                })
-//                .or(staffService.findByUsername(user.getUsername()))
-//                .ifPresentOrElse(u -> {
-//                    if (!passwordEncoder.matches(user.getPassword(), user.getPassword())) {
-//                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
-//                    }
-//
-//                    Map map = Map.of("username", cus.getUsername());
-//                    String token = encryptorComponent.encrypt(map);
-//                    response.setHeader("token", token);
-//                }, () -> {
-//                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "用户名或密码错误！");
-//                });
-
 
     }
 

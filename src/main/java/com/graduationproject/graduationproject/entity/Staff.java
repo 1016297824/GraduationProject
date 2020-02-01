@@ -12,28 +12,28 @@ import javax.validation.constraints.Email;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Staff {                                         //员工
+public class Staff {                                        // 员工
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;                                         //ID
+    private int id;                                         // ID
 
     @Column(unique = true)
-    private String username;                                //用户名
+    private String username;                                // 用户名
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;                                //密码
+    private String password;                                // 密码
 
-    private String name;                                    //姓名
+    private String name;                                    // 姓名
 
-    private String telNumber;                              //电话号码
+    private String telNumber;                               // 电话号码
 
     @Email
-    private String email;                                   //邮箱
+    private String email;                                   // 邮箱
 
-    private String address;                                 //家庭住址
+    private String address;                                 // 家庭住址
 
-    private String idCardNo;                                //身份证号码
+    private String idCardNo;                                // 身份证号码
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Position position;

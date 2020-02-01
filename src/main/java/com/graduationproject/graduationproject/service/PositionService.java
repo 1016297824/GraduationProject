@@ -33,12 +33,12 @@ public class PositionService {
         Position position = new Position("总经理", "总经理办公室", 10000.00, Position.superManager);
         Position position1 = new Position("农场总经理", "农场经理办公室", 8000.00, Position.manager);
         Position position2 = new Position("餐厅总经理", "餐厅经理办公室", 7000.00, Position.manager);
-        Position position3 = new Position("饲养员", "农场", 5000.00, Position.commonUser);
-        Position position4 = new Position("粮农", "农场", 5000.00, Position.commonUser);
-        Position position5 = new Position("果农", "农场", 5000.00, Position.commonUser);
-        Position position6 = new Position("厨师", "厨房", 5000.00, Position.commonUser);
-        Position position7 = new Position("收银员", "前台", 3000.00, Position.commonUser);
-        Position position8 = new Position("服务员", "餐厅", 3000.00, Position.commonUser);
+        Position position3 = new Position("饲养员", "农场", 5000.00, Position.staff);
+        Position position4 = new Position("粮农", "农场", 5000.00, Position.staff);
+        Position position5 = new Position("果农", "农场", 5000.00, Position.staff);
+        Position position6 = new Position("厨师", "厨房", 5000.00, Position.staff);
+        Position position7 = new Position("收银员", "前台", 3000.00, Position.staff);
+        Position position8 = new Position("服务员", "餐厅", 3000.00, Position.staff);
 
         positionList.add(position);
         positionList.add(position1);
