@@ -24,4 +24,5 @@ public class Menu {                 //菜单
     private double price;           //价格
 
     private String unite;           //单位
+
 }

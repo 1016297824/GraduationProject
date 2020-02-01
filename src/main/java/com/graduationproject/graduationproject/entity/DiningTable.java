@@ -26,8 +26,12 @@ public class DiningTable {                    //餐桌
     private int seat;                       //座位数
 
     public DiningTable(String type, boolean reserve, int seat) {
+
         this.type = type;
         this.reserve = reserve;
         this.seat = seat;
+
     }
+
 }
+

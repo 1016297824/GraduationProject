@@ -27,21 +27,31 @@ public class EncryptorComponent {
 
     // 加密
     public String encrypt(Map payload) {
+
         try {
             String json = mapper.writeValueAsString(payload);
             return Encryptors.text(secretKey, salt).encrypt(json);
         } catch (JsonProcessingException e) {
+
         }
+
         return null;
     }
 
     // 解密
     public Map<String, Object> decrypt(String encryptString) {
+
         try {
+
             String json = Encryptors.text(secretKey, salt).decrypt(encryptString);
+
             return mapper.readValue(json, Map.class);
+
         } catch (Exception e) {
+
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未登录");
         }
+
     }
+
 }

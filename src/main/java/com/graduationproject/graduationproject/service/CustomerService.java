@@ -20,15 +20,19 @@ public class CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<Customer> findAll() {       //查找所有用户
+    public List<Customer> findAll() {       // 查找所有顾客信息
+
         return customerRepository.findAll();
+
     }
 
-    public Customer findByUserName(String name) {
-        return customerRepository.findByUserName(name);
+    public Customer findByUsername(String name) {           // 通过用户名查找顾客信息
+
+        return customerRepository.findByUsername(name);
+
     }
 
-    public void initCustomer() {            //初始化用户信息表
+    public void initCustomer() {            // 初始化用户信息表
 
         List<Customer> customerList = new ArrayList<Customer>();
 
@@ -39,5 +43,7 @@ public class CustomerService {
         }
 
         customerRepository.saveAll(customerList);
+
     }
+
 }

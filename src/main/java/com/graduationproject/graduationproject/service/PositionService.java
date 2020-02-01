@@ -16,11 +16,17 @@ public class PositionService {
     @Autowired
     private PositionRepository positionRepository;
 
-    public List<Position> findAll(){
+    public List<Position> findAll() {           // 查询所有职位信息
+
         return positionRepository.findAll();
     }
 
-    public void initPosition(){         //初始化职位信息表
+    public Position findById(int id) {          // 通过ID查询职位信息
+
+        return positionRepository.findById(id);
+    }
+
+    public void initPosition() {         // 初始化职位信息表
 
         List<Position> positionList = new ArrayList<Position>();
 
@@ -45,5 +51,7 @@ public class PositionService {
         positionList.add(position8);
 
         positionRepository.saveAll(positionList);
+
     }
+
 }

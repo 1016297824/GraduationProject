@@ -26,4 +26,5 @@ public class Product {                  //产品
     private String unit;                //单位
 
     private double amount;              //数量
+
 }

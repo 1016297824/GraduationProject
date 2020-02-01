@@ -20,23 +20,34 @@ public class GraduationprojectApplication {
 
     @PostConstruct
     void started() {
+
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+
     }
 
     public static void main(String[] args) {
+
         SpringApplication.run(GraduationprojectApplication.class, args);
+
     }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
+
         return new BCryptPasswordEncoder();
+
     }
 
     @Bean
     protected Hibernate5Module module() {
+
         Hibernate5Module module = new Hibernate5Module();
+
         // 序列化延迟加载对象的ID
         module.enable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
+
         return module;
+
     }
+
 }

@@ -9,8 +9,9 @@ import javax.persistence.criteria.From;
 import java.util.List;
 
 @Repository
-public interface DiningTableRepository extends CustomizedRepository<DiningTable,Integer> {
+public interface DiningTableRepository extends CustomizedRepository<DiningTable, Integer> {
 
     @Query("from DiningTable dt")
     List<DiningTable> findAll();
+
 }

@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Customer {                                     //用户
+public class Staff {                                         //员工
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +28,28 @@ public class Customer {                                     //用户
 
     private String telNumber;                              //电话号码
 
-    public Customer(String username, String password, String name, String telNumber) {
+    @Email
+    private String email;                                   //邮箱
+
+    private String address;                                 //家庭住址
+
+    private String idCardNo;                                //身份证号码
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Position position;
+
+    public Staff(String username, String password, String name, String telNumber, String email, String address, String idCardNo, Position position) {
 
         this.username = username;
         this.password = password;
         this.name = name;
         this.telNumber = telNumber;
+        this.email = email;
+        this.address = address;
+        this.idCardNo = idCardNo;
+        this.position = position;
 
     }
 
 }
+
