@@ -13,9 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Position {                     // 职位
 
-    public static final String superManager = "fg324f68sch156j";
-    public static final String manager = "j5l79g3n1m8lld3x";
-    public static final String staff = "n1yi879d6dv2b";
+    public static final String superManager = "SuperManager";
+    public static final String manager = "Manager";
+    public static final String staff = "Staff";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,5 @@ public class Position {                     // 职位
         this.location = location;
         this.basicSalary = basicSalary;
         this.authority = authority;
-
     }
-
 }

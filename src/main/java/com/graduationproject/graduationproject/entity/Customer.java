@@ -33,7 +33,5 @@ public class Customer {                                     // 用户
         this.password = password;
         this.name = name;
         this.telNumber = telNumber;
-
     }
-
 }

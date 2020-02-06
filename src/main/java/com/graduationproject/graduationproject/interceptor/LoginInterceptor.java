@@ -24,18 +24,11 @@ public class LoginInterceptor implements HandlerInterceptor {           // 登�
                 .ifPresentOrElse(token -> {
 
                     var map = encryptorComponent.decrypt(token);
-                    request.setAttribute("username", map.get("username"));
-                    request.setAttribute("role", map.get("role"));
                     request.setAttribute("authority", map.get("authority"));
-
                 }, () -> {
-
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未登录！");
-
                 });
 
         return false;
-
     }
-
 }

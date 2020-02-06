@@ -30,8 +30,6 @@ public class DiningTable {                    // 餐桌
         this.type = type;
         this.reserve = reserve;
         this.seat = seat;
-
     }
-
 }
 

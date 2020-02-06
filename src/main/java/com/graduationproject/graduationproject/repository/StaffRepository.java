@@ -16,5 +16,4 @@ public interface StaffRepository extends CustomizedRepository<Staff, Integer> {
 
     @Query("select s from Staff s where s.username=:username")
     Staff findByUsername(@Param("username") String username);
-
 }

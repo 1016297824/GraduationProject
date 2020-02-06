@@ -13,5 +13,4 @@ public interface DiningTableRepository extends CustomizedRepository<DiningTable,
 
     @Query("from DiningTable dt")
     List<DiningTable> findAll();
-
 }

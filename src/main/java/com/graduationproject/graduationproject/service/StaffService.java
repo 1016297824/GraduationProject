@@ -26,13 +26,11 @@ public class StaffService {
     public List<Staff> findAll() {           // 查询所有员工
 
         return staffRepository.findAll();
-
     }
 
     public Staff findByUsername(String username) {      // 通过用户名查询员工信息
 
         return staffRepository.findByUsername(username);
-
     }
 
     public void intiStaff() {           // 初始化员工信息表
@@ -40,13 +38,10 @@ public class StaffService {
         List<Staff> staffList = new ArrayList<Staff>();
 
         for (int i = 0; i < positionService.findAll().size(); i++) {
-
             Staff staff = new Staff("1000" + (i + 1), passwordEncoder.encode("123456"), "zk", "123456789", "zk" + (i + 1) + "@qq.com", "天津市静海区", "1234567890", positionService.findById(i + 1));
             staffList.add(staff);
         }
 
         staffRepository.saveAll(staffList);
-
     }
-
 }

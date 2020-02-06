@@ -48,8 +48,6 @@ public class Staff {                                        // 员工
         this.address = address;
         this.idCardNo = idCardNo;
         this.position = position;
-
     }
-
 }
 

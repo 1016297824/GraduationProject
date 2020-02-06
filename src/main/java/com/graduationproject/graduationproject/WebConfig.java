@@ -1,5 +1,6 @@
 package com.graduationproject.graduationproject;
 
+import com.graduationproject.graduationproject.interceptor.CustomerInterceptor;
 import com.graduationproject.graduationproject.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,9 @@ public class WebConfig implements WebMvcConfigurer {            //配置拦截�
     @Autowired
     private LoginInterceptor loginInterceptor;
 
+    @Autowired
+    private CustomerInterceptor customerInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -19,6 +23,7 @@ public class WebConfig implements WebMvcConfigurer {            //配置拦截�
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/login");
 
+        registry.addInterceptor(customerInterceptor)
+                .addPathPatterns("/api/customer/**");
     }
-
 }

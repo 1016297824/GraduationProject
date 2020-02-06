@@ -18,5 +18,4 @@ public interface PositionRepository extends CustomizedRepository<Position, Integ
 
     @Query("select p from Position p where p.id=:id")
     Position findById(@Param("id") int id);
-
 }

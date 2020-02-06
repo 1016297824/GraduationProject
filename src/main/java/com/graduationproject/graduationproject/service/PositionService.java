@@ -51,7 +51,5 @@ public class PositionService {
         positionList.add(position8);
 
         positionRepository.saveAll(positionList);
-
     }
-
 }

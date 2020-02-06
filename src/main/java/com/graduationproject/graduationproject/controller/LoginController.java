@@ -23,10 +23,10 @@ import java.util.Map;
 public class LoginController {
 
     // role
-    private static final String customer = "tj78hs1hy6s5v";
-    private static final String superManager = "6h56s3h478f4";
-    private static final String manager = "12yi9i8gnj23";
-    private static final String staff = "ghd5dh8f1bq";
+    private static final String customer = "Customer";
+    private static final String superManager = "SuperManager";
+    private static final String manager = "Manager";
+    private static final String staff = "Staff";
 
     @Autowired
     private CustomerService customerService;
@@ -61,10 +61,11 @@ public class LoginController {
 
                 }
 
-                Map map = Map.of("username", customer.getUsername(), "authority", "");
+                Map map = Map.of("authority", "customer");
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
                 response.setHeader("role", LoginController.customer);
+                response.setHeader("cname", customer.getUsername());
 
             } else if (staffService.findByUsername(user.getUsername()) != null) {
                 //System.out.println("Is staff!");            // 员工登录测试
@@ -91,19 +92,14 @@ public class LoginController {
                     role = LoginController.staff;
                 }
 
-                Map map = Map.of("username", staff.getUsername(), "authority", staff.getPosition().getAuthority());
+                Map map = Map.of("authority", staff.getPosition().getAuthority());
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
                 response.setHeader("role", role);
-
             } else {
 
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "用户名不存在！");
-
             }
-
         }
-
     }
-
 }

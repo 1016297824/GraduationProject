@@ -19,7 +19,6 @@ public class DiningTableService {
     public List<DiningTable> findAll(){     // 查询所有桌位信息
 
         return diningTableRepository.findAll();
-
     }
 
     public void initDiningTable(){          // 初始化桌位表
@@ -42,7 +41,5 @@ public class DiningTableService {
         }
 
         diningTableRepository.saveAll(diningTableList);
-
     }
-
 }

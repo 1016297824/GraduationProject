@@ -32,30 +32,24 @@ public class InitService implements InitializingBean {
             //System.out.println("position is empty");          // 测试成功控制台输出“position is empty”
 
             positionService.initPosition();
-
         }
 
         if (diningTableService.findAll().isEmpty()) {
             //System.out.println("diningTable is empty");     // 测试成功控制台输出“diningTable is empty”
 
             diningTableService.initDiningTable();
-
         }
 
         if (customerService.findAll().isEmpty()) {
             //System.out.println("customer is empty");     // 测试成功控制台输出“customer is empty”
 
             customerService.initCustomer();
-
         }
 
         if (staffService.findAll().isEmpty()) {
             //System.out.println("staff is empty");     // 测试成功控制台输出“staff is empty”
 
             staffService.intiStaff();
-
         }
-
     }
-
 }

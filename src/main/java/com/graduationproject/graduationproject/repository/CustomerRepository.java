@@ -16,5 +16,4 @@ public interface CustomerRepository extends CustomizedRepository<Customer, Integ
 
     @Query("select cus from Customer cus where cus.username=:username ")
     Customer findByUsername(@Param("username") String username);
-
 }

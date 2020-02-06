@@ -32,7 +32,6 @@ public class EncryptorComponent {
             String json = mapper.writeValueAsString(payload);
             return Encryptors.text(secretKey, salt).encrypt(json);
         } catch (JsonProcessingException e) {
-
         }
 
         return null;
@@ -42,16 +41,12 @@ public class EncryptorComponent {
     public Map<String, Object> decrypt(String encryptString) {
 
         try {
-
             String json = Encryptors.text(secretKey, salt).decrypt(encryptString);
 
             return mapper.readValue(json, Map.class);
-
         } catch (Exception e) {
 
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未登录");
         }
-
     }
-
 }

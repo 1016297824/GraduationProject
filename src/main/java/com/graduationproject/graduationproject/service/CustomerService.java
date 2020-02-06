@@ -23,13 +23,11 @@ public class CustomerService {
     public List<Customer> findAll() {       // 查找所有顾客信息
 
         return customerRepository.findAll();
-
     }
 
     public Customer findByUsername(String name) {           // 通过用户名查找顾客信息
 
         return customerRepository.findByUsername(name);
-
     }
 
     public void initCustomer() {            // 初始化用户信息表
@@ -43,7 +41,5 @@ public class CustomerService {
         }
 
         customerRepository.saveAll(customerList);
-
     }
-
 }
