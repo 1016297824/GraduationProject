@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -101,5 +102,23 @@ public class LoginController {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "用户名不存在！");
             }
         }
+    }
+
+    @PostMapping("/register")          // 用户注册
+    public Map customerRegister(@RequestBody Customer customer, HttpServletResponse response) {
+        //System.out.println("post success");       // 验证post请求是否成功
+
+        String message = null;
+
+        if (customerService.findByUsername(customer.getUsername()) != null) {
+            message = "手机号已注册！";
+            return Map.of("message", message);
+        }
+
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customerService.addCustomer(customer);
+        message = "注册成功！";
+
+        return Map.of("message", message);
     }
 }

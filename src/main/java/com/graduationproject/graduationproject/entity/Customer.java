@@ -25,13 +25,10 @@ public class Customer {                                     // 用户
 
     private String name;                                    // 姓名
 
-    private String telNumber;                               // 电话号码
-
-    public Customer(String username, String password, String name, String telNumber) {
+    public Customer(String username, String password, String name) {
 
         this.username = username;
         this.password = password;
         this.name = name;
-        this.telNumber = telNumber;
     }
 }

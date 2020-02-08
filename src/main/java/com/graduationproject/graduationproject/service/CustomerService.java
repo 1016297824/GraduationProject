@@ -35,11 +35,15 @@ public class CustomerService {
         List<Customer> customerList = new ArrayList<Customer>();
 
         for (int i = 0; i < 3; i++) {
-
-            Customer customer = new Customer("zk" + (i + 1), passwordEncoder.encode("123456"), "zk", "123456789");
+            Customer customer = new Customer("1554663266" + (i + 1), passwordEncoder.encode("123456"), "zk");
             customerList.add(customer);
         }
 
         customerRepository.saveAll(customerList);
+    }
+
+    public void addCustomer(Customer customer) {
+
+        customerRepository.save(customer);
     }
 }
