@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -24,6 +26,9 @@ public class Customer {                                     // 用户
     private String password;                                // 密码
 
     private String name;                                    // 姓名
+
+    @OneToMany(mappedBy = "customer")
+    private List<Reserve> reserveList;
 
     public Customer(String username, String password, String name) {
 

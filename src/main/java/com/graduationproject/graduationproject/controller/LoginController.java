@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -66,7 +65,7 @@ public class LoginController {
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
                 response.setHeader("role", LoginController.customer);
-                response.setHeader("cname", customer.getUsername());
+                response.setHeader("username", customer.getUsername());
 
             } else if (staffService.findByUsername(user.getUsername()) != null) {
                 //System.out.println("Is staff!");            // 员工登录测试

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,14 +19,14 @@ public class DiningTable {                    // 餐桌
 
     private String type;                      // 类型
 
-    private boolean reserve;                  // 是否预定
-
     private int seat;                         // 座位数
 
-    public DiningTable(String type, boolean reserve, int seat) {
+    @OneToMany(mappedBy = "diningTable")
+    private List<Reserve> reserveList;
+
+    public DiningTable(String type, int seat) {
 
         this.type = type;
-        this.reserve = reserve;
         this.seat = seat;
     }
 }

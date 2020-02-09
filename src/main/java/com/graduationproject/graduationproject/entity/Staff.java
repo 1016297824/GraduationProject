@@ -18,7 +18,7 @@ public class Staff {                                        // 员工
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;                                         // ID
 
-    @Column(unique = true)
+    @JoinColumn(unique = true)
     private String username;                                // 用户名
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
