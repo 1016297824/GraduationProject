@@ -1,6 +1,5 @@
 package com.graduationproject.graduationproject.interceptor;
 
-import com.graduationproject.graduationproject.entity.Customer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,6 +13,7 @@ public class CustomerInterceptor implements HandlerInterceptor {            //Êù
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //System.out.println("CustomerInterceptor");
 
         String authority = (String) request.getAttribute("authority");
 

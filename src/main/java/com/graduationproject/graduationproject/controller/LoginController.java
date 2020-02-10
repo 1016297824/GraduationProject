@@ -7,7 +7,6 @@ import com.graduationproject.graduationproject.entity.Staff;
 import com.graduationproject.graduationproject.entity.User;
 import com.graduationproject.graduationproject.service.CustomerService;
 import com.graduationproject.graduationproject.service.StaffService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-@Slf4j
 @RestController
 @RequestMapping("/api")
 public class LoginController {
@@ -120,4 +118,11 @@ public class LoginController {
 
         return Map.of("message", message);
     }
+
+//    @GetMapping("/customer/reserveAdd/initDining")         //显示桌位
+//    public Map reserveAdd() {
+//        System.out.println("get success");
+//
+//        return Map.of("diningTable","diningTable");
+//    }
 }

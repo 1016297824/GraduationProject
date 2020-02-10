@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,7 +26,10 @@ public class Reserve {              // 预定表
             insertable = false)
     private LocalDateTime insertTime;       // 创建时间
 
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",nullable = false)
     private LocalDateTime startTime;        // 开始时间
+
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",nullable = false)
     private LocalDateTime endTime;          // 结束时间
 
     @ManyToOne
