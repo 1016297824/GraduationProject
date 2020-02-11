@@ -1,5 +1,6 @@
 package com.graduationproject.graduationproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,10 +27,10 @@ public class Reserve {              // 预定表
             insertable = false)
     private LocalDateTime insertTime;       // 创建时间
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDateTime startTime;        // 开始时间
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDateTime endTime;          // 结束时间
 
     @ManyToOne

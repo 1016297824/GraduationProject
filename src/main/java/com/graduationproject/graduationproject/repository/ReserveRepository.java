@@ -17,5 +17,5 @@ public interface ReserveRepository extends CustomizedRepository<Reserve, Integer
     @Query("select re.diningTable from Reserve re " +
             "where re.endTime>:startTime " +
             "or  re.startTime<:endTime")
-    List<DiningTable> findDiningTableByNow(@Param("startTime") LocalDateTime startTime,@Param("endTime") LocalDateTime endTime);
+    List<DiningTable> findDiningTableByTime(@Param("startTime") LocalDateTime startTime,@Param("endTime") LocalDateTime endTime);
 }

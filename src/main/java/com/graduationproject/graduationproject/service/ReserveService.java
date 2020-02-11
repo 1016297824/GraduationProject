@@ -16,7 +16,7 @@ public class ReserveService {
     @Autowired
     private ReserveRepository reserveRepository;
 
-    public List<DiningTable> findDiningTableByNow(LocalDateTime startTime,LocalDateTime endTime){
-        return reserveRepository.findDiningTableByNow(startTime, endTime);
+    public List<DiningTable> findDiningTableByTime(LocalDateTime startTime,LocalDateTime endTime){
+        return reserveRepository.findDiningTableByTime(startTime, endTime);
     }
 }

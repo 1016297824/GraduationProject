@@ -4,7 +4,7 @@ import com.graduationproject.graduationproject.component.EncryptorComponent;
 import com.graduationproject.graduationproject.entity.Customer;
 import com.graduationproject.graduationproject.entity.Position;
 import com.graduationproject.graduationproject.entity.Staff;
-import com.graduationproject.graduationproject.entity.User;
+import com.graduationproject.graduationproject.entity.body.UserBody;
 import com.graduationproject.graduationproject.service.CustomerService;
 import com.graduationproject.graduationproject.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +39,21 @@ public class LoginController {
     private EncryptorComponent encryptorComponent;
 
     @PostMapping("/login")          // 用户登录
-    public void customerLogin(@RequestBody User user, HttpServletResponse response) {
+    public void customerLogin(@RequestBody UserBody userBody, HttpServletResponse response) {
         //System.out.println("post success");       // 验证post请求是否成功
 
-        if (user != null) {
+        if (userBody != null) {
             //System.out.println("User not null!");
 
             Customer customer = null;
             Staff staff = null;
 
-            if (customerService.findByUsername(user.getUsername()) != null) {
+            if (customerService.findByUsername(userBody.getUsername()) != null) {
                 //System.out.println("Is customer!");          // 顾客登录测试
 
-                customer = customerService.findByUsername(user.getUsername());
+                customer = customerService.findByUsername(userBody.getUsername());
 
-                if (!passwordEncoder.matches(user.getPassword(), customer.getPassword())) {
+                if (!passwordEncoder.matches(userBody.getPassword(), customer.getPassword())) {
 
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
 
@@ -65,12 +65,12 @@ public class LoginController {
                 response.setHeader("role", LoginController.customer);
                 response.setHeader("username", customer.getUsername());
 
-            } else if (staffService.findByUsername(user.getUsername()) != null) {
+            } else if (staffService.findByUsername(userBody.getUsername()) != null) {
                 //System.out.println("Is staff!");            // 员工登录测试
 
-                staff = staffService.findByUsername(user.getUsername());
+                staff = staffService.findByUsername(userBody.getUsername());
 
-                if (!passwordEncoder.matches(user.getPassword(), staff.getPassword())) {
+                if (!passwordEncoder.matches(userBody.getPassword(), staff.getPassword())) {
 
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
 
