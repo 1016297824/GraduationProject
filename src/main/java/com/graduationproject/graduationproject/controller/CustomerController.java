@@ -37,18 +37,40 @@ public class CustomerController {
     private ReserveService reserveService;
 
     @GetMapping("/reserveAdd/initDiningTable")         // 显示桌位
-    public Map reserveAdd() {
+    public Map initDiningTable() {
         //System.out.println("get success");
 
+        int page = 1;
+        int pages = 0;
+        List<Integer> pageList = new ArrayList<Integer>();
         List<DiningTable> diningTableList = new ArrayList<DiningTable>();
+
         diningTableList = diningTableService.findAll();
 
         List<DiningTable> diningTableList1 = reserveService.findDiningTableByNow(LocalDateTime.now(), LocalDateTime.now().plusHours(2));
 
-        if (!diningTableList1.isEmpty()){
+        if (!diningTableList1.isEmpty()) {
             diningTableList.removeAll(diningTableList1);
         }
 
-        return Map.of("diningTableList", diningTableList);
+        if (diningTableList.size() / 5 > 5) {
+            for (int i = 0; i < 5; i++) {
+                pageList.add(i + 1);
+            }
+        } else {
+            if (diningTableList.size() % 5 != 0) {
+                pages = (diningTableList.size() + 5) / 5;
+            } else {
+                pages = diningTableList.size() / 5;
+            }
+
+            for (int i = 0; i < pages; i++) {
+                pageList.add(i + 1);
+            }
+        }
+
+        diningTableList = diningTableList.subList(0, 5);
+
+        return Map.of("diningTableList", diningTableList, "page", page, "pageList", pageList);
     }
 }
