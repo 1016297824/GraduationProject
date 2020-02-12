@@ -103,7 +103,7 @@ public class CustomerController {
 
     @PostMapping("/reserveAdd/doPage")
     public Map doPage(@RequestBody PageBody pageBody) {
-        //System.out.println("post success");
+        System.out.println("post success" + pageBody.getStartTime());
 
         List<Integer> pageList = new ArrayList<Integer>();
         List<DiningTable> diningTableList = new ArrayList<DiningTable>();
