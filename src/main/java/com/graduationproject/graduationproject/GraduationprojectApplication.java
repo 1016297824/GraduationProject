@@ -4,6 +4,7 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.graduationproject.graduationproject.repository.impl.CustomizedRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,6 +16,7 @@ import java.util.TimeZone;
 
 @EnableScheduling
 @SpringBootApplication
+@ServletComponentScan
 @EnableJpaRepositories(repositoryBaseClass = CustomizedRepositoryImpl.class)
 public class GraduationprojectApplication {
 

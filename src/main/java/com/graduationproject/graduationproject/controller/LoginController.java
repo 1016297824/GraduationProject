@@ -59,7 +59,7 @@ public class LoginController {
 
                 }
 
-                Map map = Map.of("authority", "customer");
+                Map map = Map.of("authority", "customer", "username", customer.getUsername());
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
                 response.setHeader("role", LoginController.customer);

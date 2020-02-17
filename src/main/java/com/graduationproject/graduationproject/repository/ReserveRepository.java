@@ -13,8 +13,22 @@ import java.util.List;
 @Repository
 public interface ReserveRepository extends CustomizedRepository<Reserve, Integer> {
 
+    @Query("select re from Reserve re where re.customer.username=:username")
+    List<Reserve> findByCustomerUsername(@Param("username") String username);
+
+    @Query("select re from Reserve re where re.no=:no")
+    Reserve findByNo(@Param("no") String no);
+
     @Query("select re.diningTable from Reserve re " +
-            "where (re.endTime>:startTime and re.startTime<:startTime)" +
-            "or (re.endTime>:endTime and re.startTime<:endTime)")
-    List<DiningTable> findDiningTableByTime(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+            "where (re.startTime<=:startTime and re.endTime>:startTime)" +
+            "or (re.startTime<:endTime and re.endTime>=:endTime) " +
+            "or (re.startTime>=:startTime and re.endTime<=:endTime)")
+    List<DiningTable> findDiningTableByTime(@Param("startTime") LocalDateTime startTime,
+                                            @Param("endTime") LocalDateTime endTime);
+
+    @Query("select count(re) from Reserve re")
+    int getCount();
+
+    @Query("select max(re.no) from Reserve re")
+    int getMaxNo();
 }

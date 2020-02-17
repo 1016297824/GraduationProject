@@ -43,5 +43,6 @@ public class StaffService {
         }
 
         staffRepository.saveAll(staffList);
+        staffRepository.flush();
     }
 }

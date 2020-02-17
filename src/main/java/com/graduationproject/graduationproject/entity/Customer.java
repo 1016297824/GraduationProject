@@ -13,19 +13,25 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Customer {                                     // 用户
+// 用户
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;                                         // ID
+    // ID
+    private int id;
 
-    @Column(unique = true)
-    private String username;                                // 用户名
+    @Column(unique = true,nullable = false)
+    // 用户名
+    private String username;
 
+    @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;                                // 密码
+    // 密码
+    private String password;
 
-    private String name;                                    // 姓名
+    // 姓名
+    private String name;
 
     @OneToMany(mappedBy = "customer")
     private List<Reserve> reserveList;

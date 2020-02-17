@@ -30,6 +30,11 @@ public class CustomerService {
         return customerRepository.findByUsername(name);
     }
 
+    public void addCustomer(Customer customer) {        // 存入顾客信息
+
+        customerRepository.saveAndFlush(customer);
+    }
+
     public void initCustomer() {            // 初始化用户信息表
 
         List<Customer> customerList = new ArrayList<Customer>();
@@ -40,10 +45,5 @@ public class CustomerService {
         }
 
         customerRepository.saveAll(customerList);
-    }
-
-    public void addCustomer(Customer customer) {
-
-        customerRepository.save(customer);
     }
 }

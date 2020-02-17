@@ -1,6 +1,5 @@
 package com.graduationproject.graduationproject.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,8 +17,8 @@ public class Reserve {              // 预定表
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JoinColumn(unique = true)
-    private int no;                 // 订单号
+    @Column(unique = true, nullable = false)
+    private String no;                 // 订单号
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL " +
             "DEFAULT CURRENT_TIMESTAMP",
@@ -27,10 +26,10 @@ public class Reserve {              // 预定表
             insertable = false)
     private LocalDateTime insertTime;       // 创建时间
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
     private LocalDateTime startTime;        // 开始时间
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
     private LocalDateTime endTime;          // 结束时间
 
     @ManyToOne
