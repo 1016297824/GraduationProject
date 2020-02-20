@@ -5,21 +5,36 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Menu {                 // 菜单
+// 菜单
+public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;                 // ID
+    // ID
+    private int id;
 
-    private String name;            // 菜名
+    // 菜名
+    private String name;
 
-    private double price;           // 价格
+    // 价格
+    private double price;
 
-    private String unite;           // 单位
+    // 单位
+    private String unite;
+
+    // 类型
+    private String type;
+
+    public Menu(String name, double price, String unite, String type) {
+
+        this.name = name;
+        this.price = price;
+        this.unite = unite;
+        this.type = type;
+    }
 }

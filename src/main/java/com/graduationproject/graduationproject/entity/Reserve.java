@@ -11,26 +11,31 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Reserve {              // 预定表
+// 预定表
+public class Reserve {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(unique = true, nullable = false)
-    private String no;                 // 订单号
+    // 订单号
+    private String no;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL " +
             "DEFAULT CURRENT_TIMESTAMP",
             updatable = false,
             insertable = false)
-    private LocalDateTime insertTime;       // 创建时间
+    // 创建时间
+    private LocalDateTime insertTime;
 
     @Column(nullable = false)
-    private LocalDateTime startTime;        // 开始时间
+    // 开始时间
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private LocalDateTime endTime;          // 结束时间
+    // 结束时间
+    private LocalDateTime endTime;
 
     @ManyToOne
     private Customer customer;

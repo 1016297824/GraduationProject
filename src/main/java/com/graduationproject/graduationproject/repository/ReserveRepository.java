@@ -31,4 +31,7 @@ public interface ReserveRepository extends CustomizedRepository<Reserve, Integer
 
     @Query("select max(re.no) from Reserve re")
     int getMaxNo();
+
+    @Query("select re from Reserve re where re.endTime<=:nowTime")
+    List<Reserve> findAllOverdueReserve(@Param("nowTime") LocalDateTime nowTime);
 }

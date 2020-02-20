@@ -11,7 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Position {                     // 职位
+// 职位
+public class Position {
 
     public static final String superManager = "SuperManager";
     public static final String manager = "Manager";
@@ -19,15 +20,20 @@ public class Position {                     // 职位
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;                         // ID
+    // ID
+    private int id;
 
-    private String name;                    // 职位名称
+    // 职位名称
+    private String name;
 
-    private String location;                // 办公地点
+    // 办公地点
+    private String location;
 
-    private double basicSalary;             // 基本工资
+    // 基本工资
+    private double basicSalary;
 
-    private String authority;               // 权限
+    // 权限
+    private String authority;
 
     @OneToMany(mappedBy = "position")
     private List<Staff> staffList;

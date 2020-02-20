@@ -16,23 +16,26 @@ public class PositionService {
     @Autowired
     private PositionRepository positionRepository;
 
-    public List<Position> findAll() {           // 查询所有职位信息
+    // 查询所有职位信息
+    public List<Position> findAll() {
 
         return positionRepository.findAll();
     }
 
-    public Position findById(int id) {          // 通过ID查询职位信息
+    // 通过ID查询职位信息
+    public Position findById(int id) {
 
         return positionRepository.findById(id);
     }
 
-    public void initPosition() {         // 初始化职位信息表
+    // 初始化职位信息表
+    public void initPosition() {
 
         List<Position> positionList = new ArrayList<Position>();
 
         Position position = new Position("总经理", "总经理办公室", 10000.00, Position.superManager);
-        Position position1 = new Position("农场总经理", "农场经理办公室", 8000.00, Position.manager);
-        Position position2 = new Position("餐厅总经理", "餐厅经理办公室", 7000.00, Position.manager);
+        Position position1 = new Position("农场经理", "农场经理办公室", 8000.00, Position.manager);
+        Position position2 = new Position("餐厅经理", "餐厅经理办公室", 7000.00, Position.manager);
         Position position3 = new Position("饲养员", "农场", 5000.00, Position.staff);
         Position position4 = new Position("粮农", "农场", 5000.00, Position.staff);
         Position position5 = new Position("果农", "农场", 5000.00, Position.staff);
@@ -51,6 +54,5 @@ public class PositionService {
         positionList.add(position8);
 
         positionRepository.saveAll(positionList);
-        positionRepository.flush();
     }
 }

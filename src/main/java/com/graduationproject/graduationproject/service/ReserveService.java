@@ -60,4 +60,10 @@ public class ReserveService {
 
         reserveRepository.saveAndFlush(reserve);
     }
+
+    // 查询过期订单
+    public List<Reserve> findAllOverdueReserve(LocalDateTime nowTime) {
+
+        return reserveRepository.findAllOverdueReserve(nowTime);
+    }
 }

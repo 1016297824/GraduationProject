@@ -40,16 +40,37 @@ public class CustomerController {
     @Autowired
     private ReserveService reserveService;
 
-    // 获得订单信息
+    // 获得订单信息 （预定和点餐通用）
     @GetMapping("/reserve/getReserve")
     public Map getReserve(@RequestAttribute String username) {
         //System.out.println("get success!");
 
+        // 预定使用
         List<Reserve> reserveList = new ArrayList<Reserve>();
+        // 点餐使用
+        List<List<Reserve>> reserveLists = new ArrayList<List<Reserve>>();
+
 
         reserveList = reserveService.findByCustomerUsername(username);
 
-        return Map.of("reserveList", reserveList);
+        int count = reserveList.size();
+        int column = 0;
+        List<Reserve> reserveList1 = new ArrayList<Reserve>();
+        for (Reserve re : reserveList) {
+            column++;
+            reserveList1.add(re);
+            if (column == 3) {
+                column = 0;
+                reserveLists.add(reserveList1);
+                reserveList1 = new ArrayList<Reserve>();
+            }
+        }
+
+        if (column != 0) {
+            reserveLists.add(reserveList.subList(count - column, count));
+        }
+
+        return Map.of("reserveList", reserveList, "reserveLists", reserveLists);
     }
 
     // 删除订单
@@ -69,8 +90,9 @@ public class CustomerController {
         return Map.of("reserveList", reserveList);
     }
 
-    // 显示默认桌位
+
     @GetMapping("/reserveAdd/initDiningTable")
+    // 显示默认桌位
     public Map initDiningTable() {
         //System.out.println("get success");
 
@@ -137,8 +159,9 @@ public class CustomerController {
         return Map.of("diningTableList", diningTableList, "pageBody", pageBody);
     }
 
-    // 桌位分页
+
     @PostMapping("/reserveAdd/doPage")
+    // 桌位分页
     public Map doPage(@RequestBody PageBody pageBody) {
         //System.out.println("post success " + pageBody.getStartTime());
 
@@ -212,8 +235,9 @@ public class CustomerController {
         return Map.of("diningTableList", diningTableList, "pageBody", pageBody);
     }
 
-    // 添加订单信息
+
     @PostMapping("/reserveAdd/{diningTableId}")
+    // 添加订单信息
     public Map reserve(@PathVariable int diningTableId,
                        @RequestAttribute String username,
                        @RequestBody PageBody pageBody,
@@ -241,4 +265,6 @@ public class CustomerController {
 
         return Map.of("message", "预定成功！");
     }
+
+
 }

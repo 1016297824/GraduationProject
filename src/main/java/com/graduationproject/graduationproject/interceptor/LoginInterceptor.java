@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Component
-public class LoginInterceptor implements HandlerInterceptor {           // 登录拦截
+// 登录拦截
+public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
     private EncryptorComponent encryptorComponent;

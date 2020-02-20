@@ -38,9 +38,11 @@ public class LoginController {
     @Autowired
     private EncryptorComponent encryptorComponent;
 
-    @PostMapping("/login")          // 用户登录
+    @PostMapping("/login")
+    // 用户登录
     public void customerLogin(@RequestBody UserBody userBody, HttpServletResponse response) {
-        //System.out.println("post success");       // 验证post请求是否成功
+        // 验证post请求是否成功
+        //System.out.println("post success");
 
         if (userBody != null) {
             //System.out.println("User not null!");
@@ -49,7 +51,8 @@ public class LoginController {
             Staff staff = null;
 
             if (customerService.findByUsername(userBody.getUsername()) != null) {
-                //System.out.println("Is customer!");          // 顾客登录测试
+                // 顾客登录测试
+                //System.out.println("Is customer!");
 
                 customer = customerService.findByUsername(userBody.getUsername());
 
@@ -66,7 +69,8 @@ public class LoginController {
                 response.setHeader("username", customer.getUsername());
 
             } else if (staffService.findByUsername(userBody.getUsername()) != null) {
-                //System.out.println("Is staff!");            // 员工登录测试
+                // 员工登录测试
+                //System.out.println("Is staff!");
 
                 staff = staffService.findByUsername(userBody.getUsername());
 
@@ -101,9 +105,11 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/register")          // 用户注册
-    public Map customerRegister(@RequestBody Customer customer, HttpServletResponse response) {
-        //System.out.println("post success");       // 验证post请求是否成功
+    @PostMapping("/register")
+    // 用户注册
+    public Map customerRegister(@RequestBody Customer customer) {
+        // 验证post请求是否成功
+        //System.out.println("post success");
 
         String message = null;
 
@@ -118,11 +124,4 @@ public class LoginController {
 
         return Map.of("message", message);
     }
-
-//    @GetMapping("/customer/reserveAdd/initDining")         //显示桌位
-//    public Map reserveAdd() {
-//        System.out.println("get success");
-//
-//        return Map.of("diningTable","diningTable");
-//    }
 }

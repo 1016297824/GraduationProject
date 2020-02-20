@@ -24,32 +24,48 @@ public class InitService implements InitializingBean {
     @Autowired
     private StaffService staffService;
 
+    @Autowired
+    private MenuService menuService;
+
     @Override
-    public void afterPropertiesSet() throws Exception {     // 初始化
-        //System.out.println("afterPropertiesSet");         // 测试是否进入初始化
+    // 初始化
+    public void afterPropertiesSet() throws Exception {
+        // 测试是否进入初始化
+        //System.out.println("afterPropertiesSet");
 
         if (positionService.findAll().isEmpty()) {
-            //System.out.println("position is empty");          // 测试成功控制台输出“position is empty”
+            // 测试成功控制台输出“position is empty”
+            //System.out.println("position is empty");
 
             positionService.initPosition();
         }
 
         if (diningTableService.findAll().isEmpty()) {
-            //System.out.println("diningTable is empty");     // 测试成功控制台输出“diningTable is empty”
+            // 测试成功控制台输出“diningTable is empty”
+            //System.out.println("diningTable is empty");
 
             diningTableService.initDiningTable();
         }
 
         if (customerService.findAll().isEmpty()) {
-            //System.out.println("customer is empty");     // 测试成功控制台输出“customer is empty”
+            // 测试成功控制台输出“customer is empty”
+            //System.out.println("customer is empty");
 
             customerService.initCustomer();
         }
 
         if (staffService.findAll().isEmpty()) {
-            //System.out.println("staff is empty");     // 测试成功控制台输出“staff is empty”
+            // 测试成功控制台输出“staff is empty”
+            //System.out.println("staff is empty");
 
             staffService.intiStaff();
+        }
+
+        if (menuService.findAll().isEmpty()){
+            // 测试成功控制台输出“menu is empty”
+            //System.out.println("menu is empty");
+
+            menuService.initMenu();
         }
     }
 }

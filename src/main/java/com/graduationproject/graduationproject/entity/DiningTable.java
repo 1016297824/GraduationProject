@@ -11,15 +11,19 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DiningTable {                    // 餐桌
+// 餐桌
+public class DiningTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;                           // ID
+    // ID
+    private int id;
 
-    private String type;                      // 类型
+    // 类型
+    private String type;
 
-    private int seat;                         // 座位数
+    // 座位数
+    private int seat;
 
     @OneToMany(mappedBy = "diningTable")
     private List<Reserve> reserveList;

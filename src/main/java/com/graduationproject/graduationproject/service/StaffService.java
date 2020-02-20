@@ -23,17 +23,20 @@ public class StaffService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<Staff> findAll() {           // 查询所有员工
+    // 查询所有员工
+    public List<Staff> findAll() {
 
         return staffRepository.findAll();
     }
 
-    public Staff findByUsername(String username) {      // 通过用户名查询员工信息
+    // 通过用户名查询员工信息
+    public Staff findByUsername(String username) {
 
         return staffRepository.findByUsername(username);
     }
 
-    public void intiStaff() {           // 初始化员工信息表
+    // 初始化员工信息表
+    public void intiStaff() {
 
         List<Staff> staffList = new ArrayList<Staff>();
 
@@ -43,6 +46,5 @@ public class StaffService {
         }
 
         staffRepository.saveAll(staffList);
-        staffRepository.flush();
     }
 }

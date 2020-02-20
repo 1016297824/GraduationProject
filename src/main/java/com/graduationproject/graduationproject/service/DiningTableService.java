@@ -16,17 +16,20 @@ public class DiningTableService {
     @Autowired
     private DiningTableRepository diningTableRepository;
 
-    public List<DiningTable> findAll() {        // 查询所有桌位信息
+    // 查询所有桌位信息
+    public List<DiningTable> findAll() {
 
         return diningTableRepository.findAll();
     }
 
-    public DiningTable findById(int id){        // 通过ID查询桌位信息
+    // 通过ID查询桌位信息
+    public DiningTable findById(int id){
 
         return diningTableRepository.findById(id);
     }
 
-    public void initDiningTable() {          // 初始化桌位表
+    // 初始化桌位表
+    public void initDiningTable() {
 
         List<DiningTable> diningTableList = new ArrayList<DiningTable>();
 
