@@ -40,8 +40,8 @@ public class CustomerController {
     @Autowired
     private ReserveService reserveService;
 
-    // 获得订单信息 （预定和点餐通用）
     @GetMapping("/reserve/getReserve")
+    // 获得订单信息 （预定和点餐通用）
     public Map getReserve(@RequestAttribute String username) {
         //System.out.println("get success!");
 
@@ -73,8 +73,8 @@ public class CustomerController {
         return Map.of("reserveList", reserveList, "reserveLists", reserveLists);
     }
 
-    // 删除订单
     @PostMapping("/reserve/deleteReserve/{no}")
+    // 删除订单
     public Map deleteReserve(@PathVariable String no,
                              @RequestAttribute String username) {
         //System.out.println("post success " + no);
@@ -265,6 +265,4 @@ public class CustomerController {
 
         return Map.of("message", "预定成功！");
     }
-
-
 }
