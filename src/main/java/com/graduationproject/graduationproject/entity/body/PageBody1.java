@@ -4,12 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
-// 用户登录
-public class UserBody {
+// 菜单分页
+public class PageBody1 {
 
-    private String username;
-    private String password;
+    private int page;
+    private int pages;
+    private List<Integer> pageList;
 }

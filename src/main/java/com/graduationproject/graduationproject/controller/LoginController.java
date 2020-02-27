@@ -57,9 +57,7 @@ public class LoginController {
                 customer = customerService.findByUsername(userBody.getUsername());
 
                 if (!passwordEncoder.matches(userBody.getPassword(), customer.getPassword())) {
-
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
-
                 }
 
                 Map map = Map.of("authority", "customer", "username", customer.getUsername());
@@ -75,21 +73,15 @@ public class LoginController {
                 staff = staffService.findByUsername(userBody.getUsername());
 
                 if (!passwordEncoder.matches(userBody.getPassword(), staff.getPassword())) {
-
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
-
                 }
 
                 String role = null;
 
                 if (staff.getPosition().getAuthority().equals(Position.superManager)) {
-
                     role = LoginController.superManager;
-
                 } else if (staff.getPosition().getAuthority().equals(Position.manager)) {
-
                     role = LoginController.manager;
-
                 } else if (staff.getPosition().getAuthority().equals(Position.staff)) {
                     role = LoginController.staff;
                 }
@@ -99,7 +91,6 @@ public class LoginController {
                 response.setHeader("token", token);
                 response.setHeader("role", role);
             } else {
-
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "用户名不存在！");
             }
         }

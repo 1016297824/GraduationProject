@@ -2,13 +2,10 @@ package com.graduationproject.graduationproject.controller;
 
 
 import com.graduationproject.graduationproject.component.EncryptorComponent;
-import com.graduationproject.graduationproject.entity.Customer;
-import com.graduationproject.graduationproject.entity.DiningTable;
-import com.graduationproject.graduationproject.entity.Reserve;
+import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.PageBody;
-import com.graduationproject.graduationproject.service.CustomerService;
-import com.graduationproject.graduationproject.service.DiningTableService;
-import com.graduationproject.graduationproject.service.ReserveService;
+import com.graduationproject.graduationproject.entity.body.PageBody1;
+import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +36,12 @@ public class CustomerController {
 
     @Autowired
     private ReserveService reserveService;
+
+    @Autowired
+    private OrderingService orderingService;
+
+    @Autowired
+    private MenuService menuService;
 
     @GetMapping("/reserve/getReserve")
     // 获得订单信息 （预定和点餐通用）
@@ -118,7 +121,7 @@ public class CustomerController {
 
         //log.debug("{}", diningTableList1);
         //log.debug("{}", diningTableList);
-        if (diningTableList.size() / 5 > 5) {
+        if (diningTableList.size() / 5 >= 5) {
             for (int i = 0; i < 5; i++) {
                 pageList.add(i + 1);
             }
@@ -264,5 +267,70 @@ public class CustomerController {
         reserveService.save(reserve);
 
         return Map.of("message", "预定成功！");
+    }
+
+    @GetMapping("/getOrdering/{no}")
+    // 获得点餐信息
+    public Map getOrdering(@PathVariable String no) {
+        //System.out.println("get success!" + no);
+
+        boolean isOrdered;
+        int page = 1;
+        int pages = 0;
+        List<Integer> pageList = new ArrayList<Integer>();
+        PageBody1 pageBody1 = new PageBody1();
+        List<Ordering> orderingList = new ArrayList<Ordering>();
+        List<Menu> menuList = new ArrayList<Menu>();
+        List<Menu> menuList1 = new ArrayList<Menu>();
+
+        menuList = menuService.findAll();
+        orderingList = orderingService.findByReserveNo(no);
+
+        if (menuList.size() / 5 >= 5) {
+            for (int i = 0; i < 5; i++) {
+                pageList.add(i + 1);
+            }
+
+            if (menuList.size() % 5 != 0) {
+                pages = (menuList.size() + 5) / 5;
+            } else {
+                pages = menuList.size() / 5;
+            }
+            menuList1 = menuList.subList(0, 5);
+        } else {
+            if (!menuList.isEmpty()) {
+                if (menuList.size() % 5 != 0) {
+                    pages = (menuList.size() + 5) / 5;
+                } else {
+                    pages = menuList.size() / 5;
+                }
+
+                for (int i = 0; i < pages; i++) {
+                    pageList.add(i + 1);
+                }
+
+                if (menuList.size() < 5) {
+                    menuList1 = menuList.subList(0, menuList.size());
+                } else {
+                    menuList1 = menuList.subList(0, 5);
+                }
+            }
+        }
+
+        pageBody1.setPage(page);
+        pageBody1.setPages(pages);
+        pageBody1.setPageList(pageList);
+
+        if (orderingList.isEmpty()) {
+            isOrdered = true;
+        } else {
+            isOrdered = false;
+        }
+
+        return Map.of("isOrdered", isOrdered,
+                "pageBody1", pageBody1,
+                "orderingList", orderingList,
+                "menuList1", menuList1,
+                "menuList", menuList);
     }
 }

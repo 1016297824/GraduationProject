@@ -44,6 +44,6 @@ public class Reserve {
     @ManyToOne(fetch = FetchType.LAZY)
     private DiningTable diningTable;
 
-    @OneToMany
+    @OneToMany(mappedBy = "reserve")
     private List<Ordering> orderList;
 }

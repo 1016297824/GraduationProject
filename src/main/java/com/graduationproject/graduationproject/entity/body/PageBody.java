@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+// 预定分页
 public class PageBody {
 
     private int page;
