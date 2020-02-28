@@ -23,6 +23,7 @@ public class Menu {
     private String name;
 
     // 价格
+    @Column(columnDefinition = "double(10,2) default '1.00'")
     private double price;
 
     // 单位

@@ -282,9 +282,11 @@ public class CustomerController {
         List<Ordering> orderingList = new ArrayList<Ordering>();
         List<Menu> menuList = new ArrayList<Menu>();
         List<Menu> menuList1 = new ArrayList<Menu>();
+        Reserve reserve = new Reserve();
 
         menuList = menuService.findAll();
         orderingList = orderingService.findByReserveNo(no);
+        reserve = reserveService.findByNo(no);
 
         if (menuList.size() / 5 >= 5) {
             for (int i = 0; i < 5; i++) {
@@ -322,15 +324,26 @@ public class CustomerController {
         pageBody1.setPageList(pageList);
 
         if (orderingList.isEmpty()) {
-            isOrdered = true;
-        } else {
             isOrdered = false;
+        } else {
+            isOrdered = true;
         }
 
         return Map.of("isOrdered", isOrdered,
                 "pageBody1", pageBody1,
                 "orderingList", orderingList,
                 "menuList1", menuList1,
-                "menuList", menuList);
+                "menuList", menuList,
+                "reserve", reserve);
+    }
+
+    @PostMapping("/addOrdering")
+    // 添加点餐信息
+    public Map addOrdering(@RequestBody List<Ordering> orderingList) {
+        //System.out.println("post success!" + orderingList.get(1).getMenu().getName());
+
+        orderingService.saveAll(orderingList);
+
+        return Map.of("message","提交成功！");
     }
 }

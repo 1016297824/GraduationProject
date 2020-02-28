@@ -20,4 +20,10 @@ public class OrderingService {
 
         return orderingRepository.findByReserveNo(no);
     }
+
+    // 添加点餐信息
+    public void saveAll(List<Ordering> orderingList) {
+
+        orderingRepository.saveAll(orderingList);
+    }
 }

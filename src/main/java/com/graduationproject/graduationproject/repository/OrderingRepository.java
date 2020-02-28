@@ -13,4 +13,7 @@ public interface OrderingRepository extends CustomizedRepository<Ordering, Integ
 
     @Query("select o from Ordering o where o.reserve.no=:no")
     List<Ordering> findByReserveNo(@Param("no") String no);
+
+    @Query("delete from Ordering o where o.reserve.id=:reserveId")
+    void deleteAllByReserveId(@Param("reserveId") int reserveId);
 }
