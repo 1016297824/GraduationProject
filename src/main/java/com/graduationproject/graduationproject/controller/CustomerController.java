@@ -5,11 +5,14 @@ import com.graduationproject.graduationproject.component.EncryptorComponent;
 import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.PageBody;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
+import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -340,10 +343,30 @@ public class CustomerController {
     @PostMapping("/addOrdering")
     // 添加点餐信息
     public Map addOrdering(@RequestBody List<Ordering> orderingList) {
-        //System.out.println("post success!" + orderingList.get(1).getMenu().getName());
+        //System.out.println("post success!" + orderingList.get(0).getMenu().getName());
 
         orderingService.saveAll(orderingList);
 
-        return Map.of("message","提交成功！");
+        return Map.of("message", "提交成功！");
+    }
+
+    @PostMapping("/changePassword")
+    // 修改密码
+    public Map changePassword(@RequestBody UserBody1 userBody1) {
+        //System.out.println("post success!" + userBody1.getUsername());
+
+        String message=null;
+        Customer customer = new Customer();
+
+        customer = customerService.findByUsername(userBody1.getUsername());
+        if (!passwordEncoder.matches(userBody1.getPassword(), customer.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "旧密码错误！");
+        }else {
+            customer.setPassword(passwordEncoder.encode(userBody1.getNewPassword()));
+            customerService.updateCustomer(customer);
+            message="修改成功！";
+        }
+
+        return Map.of("message", message);
     }
 }

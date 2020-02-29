@@ -35,7 +35,13 @@ public class CustomerService {
     // 存入顾客信息
     public void addCustomer(Customer customer) {
 
-        customerRepository.saveAndFlush(customer);
+        customerRepository.save(customer);
+    }
+
+    // 修改顾客信息
+    public void updateCustomer(Customer customer){
+
+        customerRepository.save(customer);
     }
 
     // 初始化用户信息表
