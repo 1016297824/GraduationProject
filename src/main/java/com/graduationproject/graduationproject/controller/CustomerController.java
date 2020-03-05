@@ -29,9 +29,6 @@ public class CustomerController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private EncryptorComponent encryptorComponent;
-
-    @Autowired
     private CustomerService customerService;
 
     @Autowired

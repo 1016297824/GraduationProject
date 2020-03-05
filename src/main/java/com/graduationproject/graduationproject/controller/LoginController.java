@@ -86,10 +86,11 @@ public class LoginController {
                     role = LoginController.staff;
                 }
 
-                Map map = Map.of("authority", staff.getPosition().getAuthority());
+                Map map = Map.of("authority", staff.getPosition().getAuthority(), "username", staff.getUsername());
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
                 response.setHeader("role", role);
+                response.setHeader("username", staff.getUsername());
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "用户名不存在！");
             }

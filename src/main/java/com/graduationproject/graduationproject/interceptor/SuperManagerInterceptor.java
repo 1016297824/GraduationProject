@@ -9,16 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-// 顾客权限拦截
-public class CustomerInterceptor implements HandlerInterceptor {
+// 超级管理员权限拦截
+public class SuperManagerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //System.out.println("CustomerInterceptor");
+        //System.out.println("SuperManager");
 
         String authority = (String) request.getAttribute("authority");
         //System.out.println(authority);
-        if (!authority.equals("customer")) {
+        if (!authority.equals("SuperManager")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "无权限");
         }
 

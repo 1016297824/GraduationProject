@@ -35,6 +35,12 @@ public class StaffService {
         return staffRepository.findByUsername(username);
     }
 
+    // 查询管理员和普通员工
+    public List<Staff> findByPositionAuthorityManagerStaff() {
+
+        return staffRepository.findByPositionAuthorityManagerStaff();
+    }
+
     // 初始化员工信息表
     public void intiStaff() {
 

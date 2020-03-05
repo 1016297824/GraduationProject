@@ -44,7 +44,7 @@ public class Staff {
     // 身份证号码
     private String idCardNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Position position;
 
     public Staff(String username, String password, String name, String telNumber, String email, String address, String idCardNo, Position position) {

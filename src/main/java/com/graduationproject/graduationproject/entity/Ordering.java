@@ -21,9 +21,9 @@ public class Ordering {
     // 个数
     private int count;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Reserve reserve;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Menu menu;
 }
