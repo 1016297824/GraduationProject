@@ -35,10 +35,40 @@ public class StaffService {
         return staffRepository.findByUsername(username);
     }
 
+    // 查询未分配员工
+    public List<Staff> findByPositionAuthorityIsNull() {
+
+        return staffRepository.findByPositionAuthorityIsNull();
+    }
+
     // 查询管理员和普通员工
     public List<Staff> findByPositionAuthorityManagerStaff() {
 
         return staffRepository.findByPositionAuthorityManagerStaff();
+    }
+
+    // 获得员工数量
+    public int getCount() {
+
+        return staffRepository.getCount();
+    }
+
+    // 获得最大员工号
+    public int getMaxNo() {
+
+        return staffRepository.getMaxNo();
+    }
+
+    // 添加员工
+    public void save(Staff staff) {
+
+        staffRepository.save(staff);
+    }
+
+    // 删除员工
+    public void deleteStaff(Staff staff) {
+
+        staffRepository.delete(staff);
     }
 
     // 初始化员工信息表

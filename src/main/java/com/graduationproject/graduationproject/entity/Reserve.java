@@ -38,10 +38,10 @@ public class Reserve {
     // 结束时间
     private LocalDateTime endTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private DiningTable diningTable;
 
     @OneToMany(mappedBy = "reserve")

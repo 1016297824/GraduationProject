@@ -23,6 +23,7 @@ public class Position {
     // ID
     private int id;
 
+    @Column(unique = true)
     // 职位名称
     private String name;
 

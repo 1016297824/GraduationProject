@@ -256,8 +256,8 @@ public class CustomerController {
         if (count == 0) {
             reserve.setNo("00001");
         } else {
-            int maxNo = reserveService.getMaxNo();
-            reserve.setNo("0000" + (maxNo + 1));
+            int maxNo = reserveService.getMaxNo() + 1;
+            reserve.setNo(String.format("%5d", maxNo).replace(" ", "0"));
         }
         reserve.setCustomer(customer);
         reserve.setDiningTable(diningTable);
@@ -352,16 +352,16 @@ public class CustomerController {
     public Map changePassword(@RequestBody UserBody1 userBody1) {
         //System.out.println("post success!" + userBody1.getUsername());
 
-        String message=null;
+        String message = null;
         Customer customer = new Customer();
 
         customer = customerService.findByUsername(userBody1.getUsername());
         if (!passwordEncoder.matches(userBody1.getPassword(), customer.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "旧密码错误！");
-        }else {
+        } else {
             customer.setPassword(passwordEncoder.encode(userBody1.getNewPassword()));
             customerService.updateCustomer(customer);
-            message="修改成功！";
+            message = "修改成功！";
         }
 
         return Map.of("message", message);

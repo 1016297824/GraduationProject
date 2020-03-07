@@ -2,6 +2,7 @@ package com.graduationproject.graduationproject.repository;
 
 import com.graduationproject.graduationproject.entity.Staff;
 import com.graduationproject.graduationproject.repository.impl.CustomizedRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,8 +18,17 @@ public interface StaffRepository extends CustomizedRepository<Staff, Integer> {
     @Query("select s from Staff s where s.username=:username")
     Staff findByUsername(@Param("username") String username);
 
+    @Query("select s from Staff s where s.position is null")
+    List<Staff> findByPositionAuthorityIsNull();
+
     @Query("select s from Staff s " +
             "where s.position.authority='Manager' " +
             "or s.position.authority='Staff'")
     List<Staff> findByPositionAuthorityManagerStaff();
+
+    @Query("select count(s) from Staff s")
+    int getCount();
+
+    @Query("select max(s.username) from Staff s")
+    int getMaxNo();
 }
