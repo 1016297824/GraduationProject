@@ -2,7 +2,7 @@ package com.graduationproject.graduationproject.config;
 
 import com.graduationproject.graduationproject.interceptor.CustomerInterceptor;
 import com.graduationproject.graduationproject.interceptor.LoginInterceptor;
-import com.graduationproject.graduationproject.interceptor.ManagerInterceptor;
+import com.graduationproject.graduationproject.interceptor.FarmManagerInterceptor;
 import com.graduationproject.graduationproject.interceptor.SuperManagerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
     private SuperManagerInterceptor superManagerInterceptor;
 
     @Autowired
-    private ManagerInterceptor managerInterceptor;
+    private FarmManagerInterceptor farmManagerInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -41,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(superManagerInterceptor)
                 .addPathPatterns("/api/superManager/**");
 
-        registry.addInterceptor(managerInterceptor)
+        registry.addInterceptor(farmManagerInterceptor)
                 .addPathPatterns("/api/manager/**");
     }
 

@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/manager")
-public class ManagerController {
+@RequestMapping("/api/restaurantManager")
+// 餐厅管理员功能
+public class RestaurantManagerController {
 
 
 }

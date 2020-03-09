@@ -18,7 +18,7 @@ public class CustomerInterceptor implements HandlerInterceptor {
 
         String authority = (String) request.getAttribute("authority");
         //System.out.println(authority);
-        if (!authority.equals("customer")) {
+        if (!authority.equals("Customer")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "无权限");
         }
 

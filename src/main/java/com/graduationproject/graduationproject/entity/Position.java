@@ -15,8 +15,10 @@ import java.util.List;
 public class Position {
 
     public static final String superManager = "SuperManager";
-    public static final String manager = "Manager";
-    public static final String staff = "Staff";
+    public static final String farmManager = "FarmManager";
+    public static final String restaurantManager = "RestaurantManager";
+    public static final String farmStaff = "FarmStaff";
+    public static final String restaurantStaff = "RestaurantStaff";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

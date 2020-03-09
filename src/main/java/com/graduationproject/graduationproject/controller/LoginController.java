@@ -18,13 +18,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+// 登录功能
 public class LoginController {
 
     // role
     private static final String customer = "Customer";
     private static final String superManager = "SuperManager";
-    private static final String manager = "Manager";
-    private static final String staff = "Staff";
+    public static final String farmManager = "FarmManager";
+    public static final String restaurantManager = "RestaurantManager";
+    public static final String farmStaff = "FarmStaff";
+    public static final String restaurantStaff = "RestaurantStaff";
 
     @Autowired
     private CustomerService customerService;
@@ -60,7 +63,7 @@ public class LoginController {
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "密码错误！");
                 }
 
-                Map map = Map.of("authority", "customer", "username", customer.getUsername());
+                Map map = Map.of("authority", LoginController.customer, "username", customer.getUsername());
                 String token = encryptorComponent.encrypt(map);
                 response.setHeader("token", token);
                 response.setHeader("role", LoginController.customer);
@@ -80,10 +83,16 @@ public class LoginController {
 
                 if (staff.getPosition().getAuthority().equals(Position.superManager)) {
                     role = LoginController.superManager;
-                } else if (staff.getPosition().getAuthority().equals(Position.manager)) {
-                    role = LoginController.manager;
-                } else if (staff.getPosition().getAuthority().equals(Position.staff)) {
-                    role = LoginController.staff;
+                } else if (staff.getPosition().getAuthority().equals(Position.farmManager)) {
+                    role = LoginController.farmManager;
+                } else if (staff.getPosition().getAuthority().equals(Position.restaurantManager)) {
+                    role = LoginController.restaurantManager;
+                } else if (staff.getPosition().getAuthority().equals(Position.farmStaff)) {
+                    role = LoginController.farmStaff;
+                } else if (staff.getPosition().getAuthority().equals(Position.restaurantStaff)) {
+                    role = LoginController.restaurantStaff;
+                } else {
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "未知错误发生了！");
                 }
 
                 Map map = Map.of("authority", staff.getPosition().getAuthority(), "username", staff.getUsername());

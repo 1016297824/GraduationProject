@@ -22,8 +22,8 @@ public interface StaffRepository extends CustomizedRepository<Staff, Integer> {
     List<Staff> findByPositionAuthorityIsNull();
 
     @Query("select s from Staff s " +
-            "where s.position.authority='Manager' " +
-            "or s.position.authority='Staff'")
+            "where s.position.authority like 'Farm%' " +
+            "or s.position.authority like 'Restaurant%'")
     List<Staff> findByPositionAuthorityManagerStaff();
 
     @Query("select count(s) from Staff s")

@@ -23,6 +23,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/customer")
+// 顾客功能
 public class CustomerController {
 
     @Autowired

@@ -111,7 +111,7 @@ public class SuperManagerController {
         Staff staff = staffService.findByUsername(username);
         staffService.deleteStaff(staff);
 
-        return Map.of("message", "删除成功！");
+        return Map.of("message", "已解雇！");
     }
 
     @PostMapping("takeOffice/{id}")

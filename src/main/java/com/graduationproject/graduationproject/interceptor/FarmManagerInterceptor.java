@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-// 管理员权限拦截
-public class ManagerInterceptor implements HandlerInterceptor {
+// 农场管理员权限拦截
+public class FarmManagerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -18,7 +18,7 @@ public class ManagerInterceptor implements HandlerInterceptor {
 
         String authority = (String) request.getAttribute("authority");
         System.out.println(authority);
-        if (!authority.equals("manager")) {
+        if (!authority.equals("FarmManager")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "无权限");
         }
 
