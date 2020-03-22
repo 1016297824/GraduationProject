@@ -1,9 +1,6 @@
 package com.graduationproject.graduationproject.config;
 
-import com.graduationproject.graduationproject.interceptor.CustomerInterceptor;
-import com.graduationproject.graduationproject.interceptor.LoginInterceptor;
-import com.graduationproject.graduationproject.interceptor.FarmManagerInterceptor;
-import com.graduationproject.graduationproject.interceptor.SuperManagerInterceptor;
+import com.graduationproject.graduationproject.interceptor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +24,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private FarmManagerInterceptor farmManagerInterceptor;
 
+    @Autowired
+    private RestaurantManagerInterceptor restaurantManagerInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -43,10 +43,13 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(farmManagerInterceptor)
                 .addPathPatterns("/api/manager/**");
+
+        registry.addInterceptor(restaurantManagerInterceptor)
+                .addPathPatterns("/api/restaurantManager/**");
     }
 
     @Bean
-    public WebMvcConfigurer webMvcConfigurer2(){
+    public WebMvcConfigurer webMvcConfigurer2() {
         return new WebMvcConfigurer() {
             /**
              * 设置头 使可以跨域访问

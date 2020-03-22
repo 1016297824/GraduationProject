@@ -28,6 +28,24 @@ public class PositionService {
         return positionRepository.findById(id);
     }
 
+    // 查询所有管理员和员工职位信息
+    public List<Position> findManagerAndStaff() {
+
+        return positionRepository.findManagerAndStaff();
+    }
+
+    // 查询所有农场员工职位
+    public List<Position> findAllFarmStaff() {
+
+        return positionRepository.findAllFarmStaff();
+    }
+
+    // 查询所有餐厅员工职位
+    public List<Position> findAllRestaurantStaff() {
+
+        return positionRepository.findAllRestaurantStaff();
+    }
+
     // 初始化职位信息表
     public void initPosition() {
 

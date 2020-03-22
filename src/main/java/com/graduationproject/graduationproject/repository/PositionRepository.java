@@ -18,4 +18,13 @@ public interface PositionRepository extends CustomizedRepository<Position, Integ
 
     @Query("select p from Position p where p.id=:id")
     Position findById(@Param("id") int id);
+
+    @Query("select p from Position p where p.authority <> 'SuperManager'")
+    List<Position> findManagerAndStaff();
+
+    @Query("select p from Position p where p.authority='FarmStaff'")
+    List<Position> findAllFarmStaff();
+
+    @Query("select p from Position p where p.authority='RestaurantStaff'")
+    List<Position> findAllRestaurantStaff();
 }

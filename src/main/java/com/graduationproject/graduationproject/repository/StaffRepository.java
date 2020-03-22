@@ -31,4 +31,10 @@ public interface StaffRepository extends CustomizedRepository<Staff, Integer> {
 
     @Query("select max(s.username) from Staff s")
     int getMaxNo();
+
+    @Query("select s from Staff s where s.position.authority='FarmStaff'")
+    List<Staff> findAllFarmStaff();
+
+    @Query("select s from Staff s where s.position.authority='RestaurantStaff'")
+    List<Staff> findAllRestaurantStaff();
 }

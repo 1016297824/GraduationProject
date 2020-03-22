@@ -47,6 +47,18 @@ public class StaffService {
         return staffRepository.findByPositionAuthorityManagerStaff();
     }
 
+    // 查询所有农场员工
+    public List<Staff> findAllFarmStaff() {
+
+        return staffRepository.findAllFarmStaff();
+    }
+
+    // 查询所有餐厅员工
+    public List<Staff> findAllRestaurantStaff() {
+
+        return staffRepository.findAllRestaurantStaff();
+    }
+
     // 获得员工数量
     public int getCount() {
 

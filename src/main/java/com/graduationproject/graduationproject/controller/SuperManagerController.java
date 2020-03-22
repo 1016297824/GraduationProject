@@ -78,7 +78,7 @@ public class SuperManagerController {
         pageBody1.setPages(pages);
         pageBody1.setPageList(pageList);
 
-        List<Position> positionList = positionService.findAll();
+        List<Position> positionList = positionService.findManagerAndStaff();
 
         return Map.of("staffList", staffList,
                 "staffList1", staffList1,
@@ -105,6 +105,7 @@ public class SuperManagerController {
     }
 
     @PostMapping("/deleteStaff/{username}")
+    // 解雇员工
     public Map deleteStaff(@PathVariable String username) {
         //System.out.println("post success!" + username);
 
@@ -115,12 +116,16 @@ public class SuperManagerController {
     }
 
     @PostMapping("takeOffice/{id}")
+    // 任职或调任员工
     public Map takeOffice(@RequestBody Staff staff, @PathVariable int id) {
         //System.out.println("post success!" + staff.getUsername() + id);
 
+        Staff staff1 = new Staff();
         Position position = positionService.findById(id);
-        staff.setPosition(position);
-        staffService.save(staff);
+        staff1 = staffService.findByUsername(staff.getUsername());
+
+        staff1.setPosition(position);
+        staffService.save(staff1);
 
         return Map.of("message", "任职成功！");
     }
