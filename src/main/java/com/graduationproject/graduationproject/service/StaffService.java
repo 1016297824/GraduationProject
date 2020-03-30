@@ -83,6 +83,18 @@ public class StaffService {
         staffRepository.delete(staff);
     }
 
+    // 获得已任职的员工
+    public List<Staff> findAllWorked() {
+
+        return staffRepository.findAllWorked();
+    }
+
+    // 更新员工信息
+    public void updateStaff(Staff staff) {
+
+        staffRepository.save(staff);
+    }
+
     // 初始化员工信息表
     public void intiStaff() {
 

@@ -113,6 +113,14 @@ public class CustomerController {
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
         endTime = endTime.withMinute(0);
         endTime = endTime.withSecond(0);
+        if (startTime.getHour() < 9) {
+            startTime = startTime.withHour(9);
+            endTime = endTime.withHour(10);
+        }
+        if (endTime.getHour() > 21) {
+            startTime = startTime.withHour(20);
+            endTime = endTime.withHour(21);
+        }
         List<DiningTable> diningTableList1 = reserveService.findDiningTableByTime(startTime, endTime);
 
         //log.debug("{}", diningTableList);
@@ -353,7 +361,7 @@ public class CustomerController {
     public Map changePassword(@RequestBody UserBody1 userBody1) {
         //System.out.println("post success!" + userBody1.getUsername());
 
-        String message = null;
+        String message = "";
         Customer customer = new Customer();
 
         customer = customerService.findByUsername(userBody1.getUsername());

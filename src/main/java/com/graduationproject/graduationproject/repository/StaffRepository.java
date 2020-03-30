@@ -37,4 +37,7 @@ public interface StaffRepository extends CustomizedRepository<Staff, Integer> {
 
     @Query("select s from Staff s where s.position.authority='RestaurantStaff'")
     List<Staff> findAllRestaurantStaff();
+
+    @Query("select s from Staff s where s.position is not null")
+    List<Staff> findAllWorked();
 }

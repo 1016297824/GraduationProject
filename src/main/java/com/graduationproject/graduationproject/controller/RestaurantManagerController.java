@@ -3,12 +3,15 @@ package com.graduationproject.graduationproject.controller;
 import com.graduationproject.graduationproject.entity.Position;
 import com.graduationproject.graduationproject.entity.Staff;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
+import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.service.PositionService;
 import com.graduationproject.graduationproject.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,5 +132,24 @@ public class RestaurantManagerController {
         staffService.save(staff1);
 
         return Map.of("message", "任职成功！");
+    }
+
+    @PostMapping("changePassword")
+    public Map changePassword(@RequestBody UserBody1 userBody1) {
+        //System.out.println("post success!" + userBody1.getUsername());
+
+        String message = "";
+        Staff staff = new Staff();
+
+        staff = staffService.findByUsername(userBody1.getUsername());
+        if (!passwordEncoder.matches(userBody1.getPassword(), staff.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "旧密码错误！");
+        } else {
+            staff.setPassword(passwordEncoder.encode(userBody1.getNewPassword()));
+            staffService.updateStaff(staff);
+            message = "修改成功！";
+        }
+
+        return Map.of("message", message);
     }
 }
