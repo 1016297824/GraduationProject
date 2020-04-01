@@ -37,20 +37,20 @@ public class TimerService {
 //    }
 
     //@Scheduled(cron = "0 * * * * ?")
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 2 * * ?")
     // 每日初始化考勤表
     public void createAttendance() {
 
         List<Staff> staffList = new ArrayList<Staff>();
         List<Attendance> attendanceList = new ArrayList<Attendance>();
 
-        staffList = staffService.findAllWorked();
+        staffList = staffService.findAll();
         for (Staff staff : staffList) {
 
             Attendance attendance = new Attendance();
 
-            if (staff.getPosition().getAuthority().equals("SuperManager")) {
-                attendance.setWorkingHours(8);
+            if (staff.getPosition() != null && staff.getPosition().getAuthority().equals("SuperManager")) {
+                attendance.setWorkingHours(12);
             } else {
                 attendance.setWorkingHours(0);
             }

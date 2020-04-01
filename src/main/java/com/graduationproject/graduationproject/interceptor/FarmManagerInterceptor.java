@@ -17,7 +17,7 @@ public class FarmManagerInterceptor implements HandlerInterceptor {
         //System.out.println("ManagerInterceptor");
 
         String authority = (String) request.getAttribute("authority");
-        System.out.println(authority);
+        //System.out.println(authority);
         if (!authority.equals("FarmManager")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "无权限");
         }
