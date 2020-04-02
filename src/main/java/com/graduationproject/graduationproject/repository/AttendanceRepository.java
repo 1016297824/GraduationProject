@@ -13,6 +13,9 @@ import java.util.List;
 @Repository
 public interface AttendanceRepository extends CustomizedRepository<Attendance, Integer> {
 
+    @Query("from  Attendance a")
+    List<Attendance> findAll();
+
     @Query("select a from Attendance a " +
             "where a.insertTime >= :choosedDate1 and a.insertTime <= :choosedDate2 " +
             "and a.staff.position.authority in  ('FarmManager','RestaurantManager')")
@@ -29,5 +32,5 @@ public interface AttendanceRepository extends CustomizedRepository<Attendance, I
             "where a.insertTime >= :choosedDate1 and a.insertTime <= :choosedDate2 " +
             "and a.staff.position.authority = 'RestaurantStaff'")
     List<Attendance> findRestaurantStaffByChooseTime(@Param("choosedDate1") LocalDateTime choosedDate1,
-                                               @Param("choosedDate2") LocalDateTime choosedDate2);
+                                                     @Param("choosedDate2") LocalDateTime choosedDate2);
 }

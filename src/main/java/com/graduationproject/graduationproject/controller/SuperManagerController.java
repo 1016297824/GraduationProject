@@ -1,6 +1,7 @@
 package com.graduationproject.graduationproject.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.graduationproject.graduationproject.component.ExcelComponent;
 import com.graduationproject.graduationproject.entity.Attendance;
 import com.graduationproject.graduationproject.entity.Position;
 import com.graduationproject.graduationproject.entity.Staff;
@@ -16,8 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -282,5 +287,20 @@ public class SuperManagerController {
         attendanceService.saveAll(attendanceList);
 
         return Map.of("message", "已提交！");
+    }
+
+    @GetMapping("outExcel")
+    public void outExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("get success!");
+
+        Map map=new HashMap();
+        List<Attendance> attendanceList = new ArrayList<Attendance>();
+
+        attendanceList = attendanceService.findAll();
+        map.put("attendanceList", "attendanceList");
+        map.put("undertakerName", "m003.getM00302()");
+        ExcelComponent.exportToExcel(request, response, "考勤信息.xls", "考勤信息.xls", map);
+        //ExcelComponent.exportToExcel(request, response, "考勤信息.xlsx", "考勤信息.xlsx", map);
+        //ExcelComponent.exportToExcel(request, response, "PR10101.xls", "PR10101.xls", map);
     }
 }

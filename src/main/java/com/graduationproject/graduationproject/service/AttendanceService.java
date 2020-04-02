@@ -16,6 +16,12 @@ public class AttendanceService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
+    // 查询所有出勤信息
+    public List<Attendance> findAll() {
+
+        return attendanceRepository.findAll();
+    }
+
     // 保存所有出勤信息
     public void saveAll(List<Attendance> attendanceList) {
 
