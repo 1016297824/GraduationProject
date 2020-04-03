@@ -27,7 +27,7 @@ public class Attendance {
     private LocalDateTime insertTime;
 
     // 工时
-    private int workingHours;
+    private double workingHours;
 
     @ManyToOne
     private Staff staff;

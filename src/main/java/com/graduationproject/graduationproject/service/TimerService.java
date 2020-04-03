@@ -36,7 +36,7 @@ public class TimerService {
 //        }
 //    }
 
-    //@Scheduled(cron = "0 * * * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
     @Scheduled(cron = "0 0 2 * * ?")
     // 每日初始化考勤表
     public void createAttendance() {

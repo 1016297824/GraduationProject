@@ -40,4 +40,7 @@ public interface StaffRepository extends CustomizedRepository<Staff, Integer> {
 
     @Query("select s from Staff s where s.position is not null")
     List<Staff> findAllWorked();
+
+    @Query("select s from Staff s where s.position.authority in ('FarmManager','RestaurantManager')")
+    List<Staff> findAllManager();
 }

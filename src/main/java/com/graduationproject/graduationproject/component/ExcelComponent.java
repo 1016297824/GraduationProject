@@ -19,31 +19,28 @@ public class ExcelComponent {
                                      String tplFileName, Map<String, Object> bean) throws IOException {
         String outFile;
         String tplFile;
-        System.out.println("1");
         outFile = ExcelComponent.processFileName(request, outFileName);
-        tplFile = "src/main/resources/templates/"+ tplFileName;
-
+        tplFile = "src/main/resources/templates/" + tplFileName;
         response.setHeader("Cache-Control", "private");
         response.setHeader("Pragma", "private");
         response.setContentType("application/vnd.ms-excel; charset=utf-8");
         response.setHeader("Content-Type", "application/force-download");
+        response.setHeader("Content-Disposition", outFile);
 
-        response.setHeader("Content-disposition", "attachment;filename=\"" + outFile + "\"");
         XLSTransformer transformer = new XLSTransformer();
-
         InputStream is = new BufferedInputStream(new FileInputStream(tplFile));
         Workbook workbook = null;
         try {
-            transformer.transformXLS(tplFile, bean, "C:\\Users\\10162\\Desktop\\毕业设计\\资料\\Excel\\test.xls");
-            //workbook = transformer.transformXLS(is, bean);
+            //transformer.transformXLS(tplFile, bean, "C:\\Users\\10162\\Desktop\\毕业设计\\资料\\Excel\\test.xls");
+            workbook = transformer.transformXLS(is, bean);
         } catch (InvalidFormatException e) {
             e.printStackTrace();
         }
-//        ServletOutputStream out = response.getOutputStream();
-//        workbook.write(out);
+        ServletOutputStream out = response.getOutputStream();
+        workbook.write(out);
         is.close();
-//        out.flush();
-//        out.close();
+        out.flush();
+        out.close();
     }
 
     private static String processFileName(HttpServletRequest request, String fileNames) {

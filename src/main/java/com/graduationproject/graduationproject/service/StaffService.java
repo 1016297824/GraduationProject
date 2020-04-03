@@ -95,6 +95,12 @@ public class StaffService {
         staffRepository.save(staff);
     }
 
+    // 查询管理员信息
+    public List<Staff> findAllManager() {
+
+        return staffRepository.findAllManager();
+    }
+
     // 初始化员工信息表
     public void intiStaff() {
 
