@@ -1,8 +1,10 @@
 package com.graduationproject.graduationproject.controller;
 
+import com.graduationproject.graduationproject.component.ExcelComponent;
 import com.graduationproject.graduationproject.entity.Attendance;
 import com.graduationproject.graduationproject.entity.Position;
 import com.graduationproject.graduationproject.entity.Staff;
+import com.graduationproject.graduationproject.entity.body.AttendanceExcel;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.service.AttendanceService;
@@ -15,8 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -284,5 +292,44 @@ public class RestaurantManagerController {
         attendanceService.saveAll(attendanceList);
 
         return Map.of("message", "已提交！");
+    }
+
+    @PostMapping("downloadAttendanceExcel")
+    // 导出考勤表
+    public void downloadAttendanceExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("get success!" + choosedDate);
+
+        Map map = new HashMap();
+        int days = 0;
+        String outFileName = "";
+        List<Staff> staffList = new ArrayList<Staff>();
+        List<Attendance> attendanceList = new ArrayList<Attendance>();
+        List<AttendanceExcel> attendanceExcelList = new ArrayList<AttendanceExcel>();
+
+        staffList = staffService.findAllRestaurantStaff();
+
+        choosedDate = choosedDate.plusHours(8);
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+
+        LocalDateTime choosedDate1 = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
+        choosedDate1 = choosedDate1.withHour(0);
+        LocalDateTime choosedDate2 = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
+        choosedDate2 = choosedDate2.withHour(23);
+        days = choosedDate2.getDayOfMonth();
+        attendanceList = attendanceService.findRestaurantStaffByChooseTime(choosedDate1, choosedDate2);
+
+        for (Staff staff : staffList) {
+            AttendanceExcel attendanceExcel = new AttendanceExcel(0, 12 * days, staff);
+            for (Attendance attendance : attendanceList) {
+                if (attendance.getStaff().getUsername().equals(staff.getUsername())) {
+                    attendanceExcel.setWorkingHours(attendanceExcel.getWorkingHours() + attendance.getWorkingHours());
+                }
+            }
+            attendanceExcel.setTrueSalary(attendanceExcel.getWorkingHours() / attendanceExcel.getTotalWorkingHours() * attendanceExcel.getStaff().getPosition().getBasicSalary());
+            attendanceExcelList.add(attendanceExcel);
+        }
+
+        map.put("attendanceExcelList", attendanceExcelList);
+        ExcelComponent.exportToExcel(request, response, outFileName, "考勤信息.xls", map);
     }
 }

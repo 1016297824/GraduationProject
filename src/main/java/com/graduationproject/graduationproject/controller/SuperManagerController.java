@@ -295,9 +295,9 @@ public class SuperManagerController {
         return Map.of("message", "已提交！");
     }
 
-    @PostMapping("downloadExcel")
+    @PostMapping("downloadAttendanceExcel")
     // 导出考勤表
-    public void downloadExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadAttendanceExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
         //System.out.println("get success!" + choosedDate);
 
         Map map = new HashMap();
@@ -332,6 +332,5 @@ public class SuperManagerController {
 
         map.put("attendanceExcelList", attendanceExcelList);
         ExcelComponent.exportToExcel(request, response, outFileName, "考勤信息.xls", map);
-        //ExcelComponent.exportToExcel(request, response, "PR10101.xls", "PR10101.xls", map);
     }
 }
