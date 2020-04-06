@@ -21,7 +21,7 @@ public class Customer {
     // ID
     private int id;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     // 用户名
     private String username;
 
@@ -35,6 +35,9 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Reserve> reserveList;
+
+    @OneToMany(mappedBy = "customer")
+    private List<OrderingComplete> completeList;
 
     public Customer(String username, String password, String name) {
 

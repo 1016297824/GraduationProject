@@ -34,4 +34,7 @@ public interface ReserveRepository extends CustomizedRepository<Reserve, Integer
 
     @Query("select re from Reserve re where re.endTime<=:nowTime")
     List<Reserve> findAllOverdueReserve(@Param("nowTime") LocalDateTime nowTime);
+
+    @Query("from Reserve")
+    List<Reserve> findAll();
 }

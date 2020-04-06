@@ -66,4 +66,10 @@ public class ReserveService {
 
         return reserveRepository.findAllOverdueReserve(nowTime);
     }
+
+    // 查询所有订单
+    public List<Reserve> findAll() {
+
+        return reserveRepository.findAll();
+    }
 }

@@ -23,18 +23,19 @@ public class TimerService {
     @Autowired
     private AttendanceService attendanceService;
 
-//    @Scheduled(cron = "0 1 * * * ?")
-//    public void cancelReserve() {
-//
-//        List<Reserve> reserveList = new ArrayList<Reserve>();
-//
-//        reserveList = reserveService.findAllOverdueReserve(LocalDateTime.now());
-//        if (!reserveList.isEmpty()) {
-//            for (Reserve reserve : reserveList) {
-//                reserveService.deleteReserve(reserve);
-//            }
-//        }
-//    }
+//    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void cancelReserve() {
+
+        List<Reserve> reserveList = new ArrayList<Reserve>();
+
+        reserveList = reserveService.findAllOverdueReserve(LocalDateTime.now());
+        if (!reserveList.isEmpty()) {
+            for (Reserve reserve : reserveList) {
+                reserveService.deleteReserve(reserve);
+            }
+        }
+    }
 
 //    @Scheduled(cron = "0 * * * * ?")
     @Scheduled(cron = "0 0 2 * * ?")

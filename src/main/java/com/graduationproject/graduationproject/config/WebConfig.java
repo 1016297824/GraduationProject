@@ -27,6 +27,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private RestaurantManagerInterceptor restaurantManagerInterceptor;
 
+    @Autowired
+    private RestaurantStaffInterceptor restaurantStaffInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -46,6 +49,9 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(restaurantManagerInterceptor)
                 .addPathPatterns("/api/restaurantManager/**");
+
+        registry.addInterceptor(restaurantStaffInterceptor)
+                .addPathPatterns("/api/restaurantStaff/**");
     }
 
     @Bean
