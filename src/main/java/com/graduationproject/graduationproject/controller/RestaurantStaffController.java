@@ -1,17 +1,16 @@
 package com.graduationproject.graduationproject.controller;
 
-import com.graduationproject.graduationproject.entity.DiningTable;
-import com.graduationproject.graduationproject.entity.Ordering;
-import com.graduationproject.graduationproject.entity.OrderingComplete;
-import com.graduationproject.graduationproject.entity.Reserve;
+import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.PageBody;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
-import com.graduationproject.graduationproject.service.OrderingCompleteService;
-import com.graduationproject.graduationproject.service.OrderingService;
-import com.graduationproject.graduationproject.service.ReserveService;
+import com.graduationproject.graduationproject.entity.body.UserBody1;
+import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,17 @@ public class RestaurantStaffController {
     @Autowired
     private OrderingCompleteService orderingCompleteService;
 
+    @Autowired
+    private RepairService repairService;
+
+    @Autowired
+    private StaffService staffService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/getReserve")
+    // 获得所有订单信息
     public Map getReserve() {
         //System.out.println("get success!");
 
@@ -83,6 +92,7 @@ public class RestaurantStaffController {
     }
 
     @PostMapping("/doPage")
+    // 订单分页
     public Map doPage(@RequestBody PageBody1 pageBody1) {
         //System.out.println("post success!" + pageBody1.getPage());
 
@@ -147,6 +157,7 @@ public class RestaurantStaffController {
     }
 
     @GetMapping("/deleteReserve/{no}")
+    // 取消订单
     public Map deleteReserve(@PathVariable String no,
                              @RequestAttribute String username) {
         //System.out.println("get success!" + no + username);
@@ -163,6 +174,7 @@ public class RestaurantStaffController {
     }
 
     @GetMapping("getOrdering/{no}")
+    // 获得点餐信息
     public Map getOrdering(@PathVariable String no) {
         //System.out.println("get success!" + no);
 
@@ -173,6 +185,7 @@ public class RestaurantStaffController {
     }
 
     @GetMapping("settleAccounts/{no}")
+    // 结账
     public Map settleAccounts(@PathVariable String no) {
         //System.out.println("get success!" + no);
 
@@ -196,6 +209,43 @@ public class RestaurantStaffController {
 
         reserveService.deleteReserve(reserve);
         message = "已结算！";
+
+        return Map.of("message", message);
+    }
+
+    @PostMapping("/submitRepair")
+    // 提交报修报损信息
+    public Map submitRepair(@RequestBody Repair repair) {
+        //System.out.println("post success!" + repair.getContent() + repair.getCause());
+
+        repair.setState(Repair.state1);
+        repair.setPrice(0.0);
+        repairService.save(repair);
+
+        Repair repair1 = new Repair();
+        repair1.setRepairType(Repair.repairType1);
+        repair1.setContent("");
+        repair1.setCause("");
+
+        return Map.of("message", "提交成功！", "repair", repair1);
+    }
+
+    @PostMapping("changePassword")
+    // 修改密码
+    public Map changePassword(@RequestBody UserBody1 userBody1) {
+        //System.out.println("post success!" + userBody1.getUsername());
+
+        String message = "";
+        Staff staff = new Staff();
+
+        staff = staffService.findByUsername(userBody1.getUsername());
+        if (!passwordEncoder.matches(userBody1.getPassword(), staff.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "旧密码错误！");
+        } else {
+            staff.setPassword(passwordEncoder.encode(userBody1.getNewPassword()));
+            staffService.updateStaff(staff);
+            message = "修改成功！";
+        }
 
         return Map.of("message", message);
     }

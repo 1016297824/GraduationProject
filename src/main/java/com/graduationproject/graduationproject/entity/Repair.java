@@ -6,23 +6,24 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-// 预定表
-public class Reserve {
+// 报修报损表
+public class Repair {
+
+    public static final String repairType1 = "报修";
+    public static final String RepairType2 = "报损";
+
+    public static final String state1 = "未完成";
+    public static final String state2 = "已完成";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // ID
     private int id;
-
-    @Column(unique = true, nullable = false)
-    // 订单号
-    private String no;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL " +
             "DEFAULT CURRENT_TIMESTAMP",
@@ -31,20 +32,18 @@ public class Reserve {
     // 创建时间
     private LocalDateTime insertTime;
 
-    @Column(nullable = false)
-    // 开始时间
-    private LocalDateTime startTime;
+    // 报修报损类型
+    private String repairType;
 
-    @Column(nullable = false)
-    // 结束时间
-    private LocalDateTime endTime;
+    // 报修报损内容
+    private String content;
 
-    @ManyToOne
-    private Customer customer;
+    // 报修报损原因
+    private String cause;
 
-    @ManyToOne
-    private DiningTable diningTable;
+    // 状态
+    private String state;
 
-    @OneToMany(mappedBy = "reserve",cascade = CascadeType.REMOVE)
-    private List<Ordering> orderList;
+    // 花费
+    private double price;
 }
