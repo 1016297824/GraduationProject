@@ -1,14 +1,13 @@
 package com.graduationproject.graduationproject.controller;
 
 import com.graduationproject.graduationproject.component.ExcelComponent;
-import com.graduationproject.graduationproject.entity.Attendance;
-import com.graduationproject.graduationproject.entity.Position;
-import com.graduationproject.graduationproject.entity.Staff;
+import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.AttendanceExcel;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.service.AttendanceService;
 import com.graduationproject.graduationproject.service.PositionService;
+import com.graduationproject.graduationproject.service.RepairService;
 import com.graduationproject.graduationproject.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,9 @@ public class RestaurantManagerController {
 
     @Autowired
     private PositionService positionService;
+
+    @Autowired
+    private RepairService repairService;
 
     @GetMapping("/getStaff")
     // 获得员工信息
@@ -331,5 +333,141 @@ public class RestaurantManagerController {
 
         map.put("attendanceExcelList", attendanceExcelList);
         ExcelComponent.exportToExcel(request, response, outFileName, "考勤信息.xls", map);
+    }
+
+    @GetMapping("getRepair")
+    public Map getRepair() {
+        //System.out.println("get success!");
+
+        int page = 1;
+        int pages = 0;
+        List<Integer> pageList = new ArrayList<Integer>();
+
+        List<Repair> repairList = new ArrayList<Repair>();
+        repairList = repairService.findByState(Repair.state1);
+
+        if (repairList.size() / 5 >= 5) {
+            for (int i = 0; i < 5; i++) {
+                pageList.add(i + 1);
+            }
+
+            if (repairList.size() % 5 != 0) {
+                pages = (repairList.size() + 5) / 5;
+            } else {
+                pages = repairList.size() / 5;
+            }
+            repairList = repairList.subList(0, 5);
+        } else {
+            if (!repairList.isEmpty()) {
+                if (repairList.size() % 5 != 0) {
+                    pages = (repairList.size() + 5) / 5;
+                } else {
+                    pages = repairList.size() / 5;
+                }
+
+                for (int i = 0; i < pages; i++) {
+                    pageList.add(i + 1);
+                }
+
+                if (repairList.size() < 5) {
+                    repairList = repairList.subList(0, repairList.size());
+                } else {
+                    repairList = repairList.subList(0, 5);
+                }
+            }
+        }
+
+        PageBody1 pageBody1 = new PageBody1();
+        pageBody1.setPage(page);
+        pageBody1.setPages(pages);
+        pageBody1.setPageList(pageList);
+
+        return Map.of("repairList", repairList, "pageBody1", pageBody1);
+    }
+
+    @PostMapping("/doPage")
+    // 订单分页
+    public Map doPage(@RequestBody PageBody1 pageBody1) {
+        //System.out.println("post success!" + pageBody1.getPage());
+
+        List<Integer> pageList = new ArrayList<Integer>();
+        List<Repair> repairList = new ArrayList<Repair>();
+
+        repairList = repairService.findByState(Repair.state1);
+        if (repairList.isEmpty()) {
+            pageBody1.setPage(0);
+            pageBody1.setPages(0);
+            pageBody1.setPageList(pageList);
+        } else {
+            if ((double) repairList.size() / 5 > 5.0) {
+                if (repairList.size() % 5 != 0) {
+                    pageBody1.setPages((repairList.size() + 5) / 5);
+                } else {
+                    pageBody1.setPages(repairList.size() / 5);
+                }
+
+                if (pageBody1.getPage() <= pageBody1.getPages()) {
+                    if (pageBody1.getPage() + 2 > pageBody1.getPages()) {
+                        for (int i = pageBody1.getPages() - 5; i < pageBody1.getPages(); i++) {
+                            pageList.add(i + 1);
+                        }
+                    } else {
+                        pageList.add(pageBody1.getPage() - 2);
+                        pageList.add(pageBody1.getPage() - 1);
+                        pageList.add(pageBody1.getPage());
+                        pageList.add(pageBody1.getPage() + 1);
+                        pageList.add(pageBody1.getPage() + 2);
+                    }
+                } else {
+                    pageBody1.setPage(pageBody1.getPages());
+                    for (int i = pageBody1.getPages() - 5; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                }
+            } else {
+                if (repairList.size() % 5 != 0) {
+                    pageBody1.setPages((repairList.size() + 5) / 5);
+                } else {
+                    pageBody1.setPages(repairList.size() / 5);
+                }
+
+                if (pageBody1.getPage() <= pageBody1.getPages()) {
+                    for (int i = 0; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                } else {
+                    pageBody1.setPage(pageBody1.getPages());
+                    for (int i = 0; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                }
+            }
+
+            repairList = repairList.subList(pageBody1.getPage() * 5 - 5, pageBody1.getPage() * 5 > repairList.size() ? repairList.size() : pageBody1.getPage() * 5);
+            pageBody1.setPageList(pageList);
+        }
+
+        return Map.of("repairList", repairList, "pageBody1", pageBody1);
+    }
+
+    @PostMapping("deleteRepair")
+    public Map deleteRepair(@RequestBody Repair repair) {
+        //System.out.println("post success!");
+
+        String message = "";
+        repairService.deleteRepair(repair);
+        message = "删除成功！";
+
+        return Map.of("message", message);
+    }
+
+    @PostMapping("completeRepair")
+    public Map completeRepair(@RequestBody Repair repair) {
+        //System.out.println("post success!" + repair.getPrice());
+
+        repair.setState(Repair.state2);
+        repairService.save(repair);
+
+        return Map.of("message", "已完成！");
     }
 }

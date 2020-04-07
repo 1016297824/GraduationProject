@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -14,9 +15,21 @@ public class RepairService {
     @Autowired
     private RepairRepository repairRepository;
 
-    //
+    // 保存报修报损信息
     public void save(Repair repair) {
 
         repairRepository.save(repair);
+    }
+
+    // 根据状态查询所有报修报损信息
+    public List<Repair> findByState(String repairState) {
+
+        return repairRepository.findByState(repairState);
+    }
+
+    // 删除报修报损信息
+    public void deleteRepair(Repair repair) {
+
+        repairRepository.delete(repair);
     }
 }
