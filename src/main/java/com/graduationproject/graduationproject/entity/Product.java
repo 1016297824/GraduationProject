@@ -16,9 +16,9 @@ import javax.persistence.Id;
 // 产品
 public class Product {
 
-    public static final String productType1="家禽";
-    public static final String productType2="鱼类";
-    public static final String productType3="果蔬";
+    public static final String productType1 = "家禽";
+    public static final String productType2 = "鱼类";
+    public static final String productType3 = "果蔬";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +39,13 @@ public class Product {
 
     // 产品类型
     private String productType;
+
+    public Product(String name, String unit, int amount, int safeAmount, String productType) {
+
+        this.name = name;
+        this.unit = unit;
+        this.amount = amount;
+        this.safeAmount = safeAmount;
+        this.productType = productType;
+    }
 }

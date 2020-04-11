@@ -250,7 +250,6 @@ public class RestaurantStaffController {
         return Map.of("message", message);
     }
 
-
     @GetMapping("getRepair")
     // 获得未完成报修报损信息
     public Map getRepair() {

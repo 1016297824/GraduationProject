@@ -27,6 +27,9 @@ public class InitService implements InitializingBean {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private ProductService productService;
+
     @Override
     // 初始化
     public void afterPropertiesSet() throws Exception {
@@ -66,6 +69,13 @@ public class InitService implements InitializingBean {
             //System.out.println("menu is empty");
 
             menuService.initMenu();
+        }
+
+        if (productService.findAll().isEmpty()){
+            // 测试成功控制台输出“product is empty”
+            //System.out.println("product is empty");
+
+            productService.initProduct();
         }
     }
 }
