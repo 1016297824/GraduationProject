@@ -3,11 +3,10 @@ package com.graduationproject.graduationproject.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.Query;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +24,7 @@ public class Product {
     // ID
     private int id;
 
+    @Column(unique = true, nullable = false)
     // 产品名称
     private String name;
 
@@ -39,6 +39,12 @@ public class Product {
 
     // 产品类型
     private String productType;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Consumption> consumptionList;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Produce> produceList;
 
     public Product(String name, String unit, int amount, int safeAmount, String productType) {
 

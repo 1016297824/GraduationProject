@@ -40,6 +40,12 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    // 通过农产品名查找农产品
+    public Product findByName(String name) {
+
+        return productRepository.findByName(name);
+    }
+
     // 初始化产品表
     public void initProduct() {
 

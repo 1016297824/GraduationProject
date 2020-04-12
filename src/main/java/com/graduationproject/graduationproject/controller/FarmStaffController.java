@@ -1,11 +1,11 @@
 package com.graduationproject.graduationproject.controller;
 
-import com.graduationproject.graduationproject.entity.Product;
-import com.graduationproject.graduationproject.entity.Repair;
-import com.graduationproject.graduationproject.entity.Staff;
+import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.repository.ProductRepository;
+import com.graduationproject.graduationproject.service.ConsumptionService;
+import com.graduationproject.graduationproject.service.ProduceService;
 import com.graduationproject.graduationproject.service.ProductService;
 import com.graduationproject.graduationproject.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +33,12 @@ public class FarmStaffController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ConsumptionService consumptionService;
+
+    @Autowired
+    private ProduceService produceService;
 
     @PostMapping("/initProduct")
     private Map initProduct(@RequestBody String productType) {
@@ -175,17 +181,25 @@ public class FarmStaffController {
     public Map addProduct(@RequestBody Product product) {
         //System.out.println("post success!" + product.getProductType());
 
-        productService.save(product);
+        String message = "";
 
-        return Map.of("message", "添加成功！");
+        if (productService.findByName(product.getName()) != null) {
+            message = "该农产品已存在！";
+        } else {
+            productService.save(product);
+            message = "添加成功！";
+        }
+
+        return Map.of("message", message);
     }
 
     @PostMapping("deleteProduct")
     // 删除农产品
     public Map deleteProduct(@RequestBody Product product) {
-        //System.out.println("post success!" + product.getProductType());
+        //System.out.println("post success!" + product.getProductType() + product.getId());
 
-        productService.deleteProduct(product);
+        Product product1 = productService.findByName(product.getName());
+        productService.deleteProduct(product1);
 
         return Map.of("message", "删除成功！");
     }
@@ -198,5 +212,38 @@ public class FarmStaffController {
         productService.save(product);
 
         return Map.of("message", "修改成功！");
+    }
+
+    @PostMapping("abnormalConsumption")
+    public Map abnormalConsumption(@RequestBody Product product) {
+        //System.out.println("post success!"+product.getAmount());
+
+        Product product1 = productService.findByName(product.getName());
+        product1.setAmount(product1.getAmount() - product.getAmount());
+        productService.save(product1);
+
+        Consumption consumption = new Consumption();
+        consumption.setAmount(product.getAmount());
+        consumption.setProduct(product1);
+        consumptionService.save(consumption);
+
+        return Map.of("message", "提交成功！");
+    }
+
+    @PostMapping("produce")
+    // 生产农产品
+    public Map produce(@RequestBody Product product) {
+        //System.out.println("post success!" + product.getAmount());
+
+        Product product1 = productService.findByName(product.getName());
+        product1.setAmount(product1.getAmount() + product.getAmount());
+        productService.save(product1);
+
+        Produce produce = new Produce();
+        produce.setAmount(product.getAmount());
+        produce.setProduct(product1);
+        produceService.save(produce);
+
+        return Map.of("message", "提交成功！");
     }
 }

@@ -16,4 +16,7 @@ public interface ProductRepository extends CustomizedRepository<Product, Integer
 
     @Query("select p from Product p where p.productType=:productType")
     List<Product> findByProductType(@Param("productType") String productType);
+
+    @Query("select p from Product p where p.name=:name")
+    Product findByName(@Param("name") String name);
 }
