@@ -233,11 +233,6 @@ public class FarmStaffController {
         }
         productService.save(product1);
 
-        Consumption consumption = new Consumption();
-        consumption.setAmount(product.getAmount());
-        consumption.setProduct(product1);
-        consumptionService.save(consumption);
-
         return Map.of("message", message);
     }
 
@@ -258,11 +253,6 @@ public class FarmStaffController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
         }
         productService.save(product1);
-
-        Produce produce = new Produce();
-        produce.setAmount(product.getAmount());
-        produce.setProduct(product1);
-        produceService.save(produce);
 
         return Map.of("message", message);
     }
@@ -313,5 +303,27 @@ public class FarmStaffController {
         purchaseService.save(purchase1);
 
         return Map.of("message","提交成功！");
+    }
+
+    @PostMapping("produce1")
+    // 生产农产品
+    public Map produce1(@RequestBody Product product) {
+        //System.out.println("post success!" + product.getAmount());
+
+        String message = "提交成功！";
+        Product product1 = productService.findByName(product.getName());
+        if (product.getProductType().equals(Product.productType1)) {
+            product1.setAmount(product1.getAmount() + product.getAmount());
+            product1.setBaseAmount(product1.getBaseAmount()-product.getAmount());
+        } else if (product.getProductType().equals(Product.productType2)) {
+            product1.setAmount(product.getAmount() + product1.getAmount());
+        } else if (product.getProductType().equals(Product.productType3)) {
+            product1.setAmount(product.getAmount() + product1.getAmount());
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
+        }
+        productService.save(product1);
+
+        return Map.of("message", message);
     }
 }
