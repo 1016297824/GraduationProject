@@ -27,7 +27,7 @@ public class Consumption {
     private LocalDateTime insertTime;
 
     // 消耗数量
-    private int amount;
+    private double amount;
 
     @ManyToOne
     private Product product;

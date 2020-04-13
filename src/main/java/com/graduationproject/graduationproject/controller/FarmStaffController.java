@@ -4,10 +4,7 @@ import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.repository.ProductRepository;
-import com.graduationproject.graduationproject.service.ConsumptionService;
-import com.graduationproject.graduationproject.service.ProduceService;
-import com.graduationproject.graduationproject.service.ProductService;
-import com.graduationproject.graduationproject.service.StaffService;
+import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +36,9 @@ public class FarmStaffController {
 
     @Autowired
     private ProduceService produceService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @PostMapping("/initProduct")
     private Map initProduct(@RequestBody String productType) {
@@ -186,6 +186,7 @@ public class FarmStaffController {
         if (productService.findByName(product.getName()) != null) {
             message = "该农产品已存在！";
         } else {
+            product.setBaseAmount(0);
             productService.save(product);
             message = "添加成功！";
         }
@@ -215,11 +216,21 @@ public class FarmStaffController {
     }
 
     @PostMapping("abnormalConsumption")
+    // 异常消耗
     public Map abnormalConsumption(@RequestBody Product product) {
         //System.out.println("post success!"+product.getAmount());
 
+        String message = "提交成功！";
         Product product1 = productService.findByName(product.getName());
-        product1.setAmount(product1.getAmount() - product.getAmount());
+        if (product.getProductType().equals(Product.productType1)) {
+            product1.setAmount(product1.getAmount() - product.getAmount());
+        } else if (product.getProductType().equals(Product.productType2)) {
+            product1.setAmount(product1.getAmount() - product.getAmount());
+        } else if (product.getProductType().equals(Product.productType3)) {
+            product1.setAmount(product1.getAmount() - product.getAmount());
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
+        }
         productService.save(product1);
 
         Consumption consumption = new Consumption();
@@ -227,7 +238,7 @@ public class FarmStaffController {
         consumption.setProduct(product1);
         consumptionService.save(consumption);
 
-        return Map.of("message", "提交成功！");
+        return Map.of("message", message);
     }
 
     @PostMapping("produce")
@@ -235,8 +246,17 @@ public class FarmStaffController {
     public Map produce(@RequestBody Product product) {
         //System.out.println("post success!" + product.getAmount());
 
+        String message = "提交成功！";
         Product product1 = productService.findByName(product.getName());
-        product1.setAmount(product1.getAmount() + product.getAmount());
+        if (product.getProductType().equals(Product.productType1)) {
+            product1.setBaseAmount(product1.getBaseAmount() + product.getAmount());
+        } else if (product.getProductType().equals(Product.productType2)) {
+            product1.setAmount(product.getAmount() + product1.getAmount());
+        } else if (product.getProductType().equals(Product.productType3)) {
+            product1.setAmount(product.getAmount() + product1.getAmount());
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
+        }
         productService.save(product1);
 
         Produce produce = new Produce();
@@ -244,6 +264,54 @@ public class FarmStaffController {
         produce.setProduct(product1);
         produceService.save(produce);
 
-        return Map.of("message", "提交成功！");
+        return Map.of("message", message);
+    }
+
+    @PostMapping("abnormalConsumption1")
+    // 异常消耗（原料）
+    public Map abnormalConsumption1(@RequestBody Product product) {
+        //System.out.println("post success!"+product.getAmount());
+
+        String message = "提交成功！";
+        Product product1 = productService.findByName(product.getName());
+        if (product.getProductType().equals(Product.productType1)) {
+            product1.setBaseAmount(product1.getBaseAmount() - product.getAmount());
+        } else if (product.getProductType().equals(Product.productType2)) {
+            product1.setAmount(product1.getAmount() - product.getAmount());
+        } else if (product.getProductType().equals(Product.productType3)) {
+            product1.setBaseAmount(product1.getBaseAmount() - product.getAmount());
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
+        }
+        productService.save(product1);
+
+        return Map.of("message", message);
+    }
+
+    @PostMapping("addPurchase")
+    // 采购原料
+    public Map addPurchase(@RequestBody Purchase purchase) {
+        //System.out.println("post success!" + purchase.getAmount() + purchase.getPrice() + purchase.getProduct().getName());
+
+        Purchase purchase1 = new Purchase();
+        Product product = productService.findByName(purchase.getProduct().getName());
+
+        if (product.getProductType().equals(Product.productType1)) {
+            product.setBaseAmount(product.getBaseAmount() + purchase.getAmount());
+        } else if (product.getProductType().equals(Product.productType2)) {
+            product.setAmount(product.getAmount() + purchase.getAmount());
+        } else if (product.getProductType().equals(Product.productType3)) {
+            product.setBaseAmount(product.getBaseAmount() + purchase.getAmount());
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
+        }
+        productService.save(product);
+
+        purchase1.setAmount(purchase.getAmount());
+        purchase1.setPrice(purchase.getPrice());
+        purchase1.setProduct(product);
+        purchaseService.save(purchase1);
+
+        return Map.of("message","提交成功！");
     }
 }

@@ -32,13 +32,19 @@ public class Product {
     private String unit;
 
     // 库存
-    private int amount;
+    private double amount;
 
     // 安全库存
-    private int safeAmount;
+    private double safeAmount;
 
     // 产品类型
     private String productType;
+
+    // 原料数量
+    private double baseAmount;
+
+    // 原料单位
+    private String baseUnit;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<Consumption> consumptionList;
@@ -46,12 +52,17 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<Produce> produceList;
 
-    public Product(String name, String unit, int amount, int safeAmount, String productType) {
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Purchase> purchaseList;
+
+    public Product(String name, String unit, double amount, double safeAmount, String productType, double baseAmount, String baseUnit) {
 
         this.name = name;
         this.unit = unit;
         this.amount = amount;
         this.safeAmount = safeAmount;
         this.productType = productType;
+        this.baseAmount = baseAmount;
+        this.baseUnit = baseUnit;
     }
 }

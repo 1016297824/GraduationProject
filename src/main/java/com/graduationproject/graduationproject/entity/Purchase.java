@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-// 生产
-public class Produce {
+// 采购表
+public class Purchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +26,11 @@ public class Produce {
     // 创建时间
     private LocalDateTime insertTime;
 
-    // 生产数量
+    // 数量
     private double amount;
+
+    // 单价
+    private double price;
 
     @ManyToOne
     private Product product;

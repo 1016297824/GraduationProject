@@ -51,23 +51,23 @@ public class ProductService {
 
         List<Product> productList = new ArrayList<Product>();
 
-        Product product = new Product("猪", "头", 20, 5, Product.productType1);
-        Product product1 = new Product("鸡", "只", 50, 10, Product.productType1);
-        Product product2 = new Product("鸭子", "只", 50, 10, Product.productType1);
-        Product product3 = new Product("鹅", "只", 50, 10, Product.productType1);
-        Product product4 = new Product("兔子", "只", 30, 5, Product.productType1);
-        Product product5 = new Product("鹌鹑", "只", 50, 10, Product.productType1);
+        Product product = new Product("猪", "头", 20.0, 5.0, Product.productType1, 0.0, "头");
+        Product product1 = new Product("鸡", "只", 50.0, 10.0, Product.productType1, 0.0, "只");
+        Product product2 = new Product("鸭子", "只", 50.0, 10.0, Product.productType1, 0.0, "只");
+        Product product3 = new Product("鹅", "只", 50.0, 10.0, Product.productType1, 0.0, "只");
+        Product product4 = new Product("兔子", "只", 30.0, 5.0, Product.productType1, 0.0, "只");
+        Product product5 = new Product("鹌鹑", "只", 50.0, 10.0, Product.productType1, 0.0, "只");
 
-        Product product6 = new Product("鲫鱼", "斤", 100, 20, Product.productType2);
-        Product product7 = new Product("鲤鱼", "斤", 100, 20, Product.productType2);
-        Product product8 = new Product("白鲢鱼", "斤", 100, 20, Product.productType2);
+        Product product6 = new Product("鲫鱼", "斤", 100.0, 20.0, Product.productType2, 0.0, "斤");
+        Product product7 = new Product("鲤鱼", "斤", 100.0, 20, Product.productType2, 0.0, "斤");
+        Product product8 = new Product("白鲢鱼", "斤", 100.0, 20.0, Product.productType2, 0.0, "斤");
 
-        Product product9 = new Product("苹果", "斤", 100, 20, Product.productType3);
-        Product product10 = new Product("枣", "斤", 100, 20, Product.productType3);
-        Product product11 = new Product("石榴", "斤", 100, 20, Product.productType3);
-        Product product12 = new Product("梨", "斤", 100, 20, Product.productType3);
-        Product product13 = new Product("白菜", "斤", 100, 20, Product.productType3);
-        Product product14 = new Product("土豆", "斤", 100, 20, Product.productType3);
+        Product product9 = new Product("苹果", "斤", 100.0, 20.0, Product.productType3, 0.0, "株");
+        Product product10 = new Product("枣", "斤", 100.0, 20.0, Product.productType3, 0.0, "株");
+        Product product11 = new Product("石榴", "斤", 100.0, 20.0, Product.productType3, 0.0, "株");
+        Product product12 = new Product("梨", "斤", 100.0, 20.0, Product.productType3, 0.0, "株");
+        Product product13 = new Product("白菜", "斤", 100.0, 20.0, Product.productType3, 0.0, "袋");
+        Product product14 = new Product("土豆", "斤", 100.0, 20.0, Product.productType3, 0.0, "斤");
 
         productList.add(product);
         productList.add(product1);
