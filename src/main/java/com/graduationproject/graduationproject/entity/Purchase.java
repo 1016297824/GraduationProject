@@ -34,4 +34,7 @@ public class Purchase {
 
     @ManyToOne
     private Product product;
+
+    @ManyToOne
+    private Fertilizer fertilizer;
 }

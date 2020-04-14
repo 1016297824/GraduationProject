@@ -30,6 +30,9 @@ public class InitService implements InitializingBean {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private FertilizerService fertilizerService;
+
     @Override
     // 初始化
     public void afterPropertiesSet() throws Exception {
@@ -64,18 +67,25 @@ public class InitService implements InitializingBean {
             staffService.intiStaff();
         }
 
-        if (menuService.findAll().isEmpty()){
+        if (menuService.findAll().isEmpty()) {
             // 测试成功控制台输出“menu is empty”
             //System.out.println("menu is empty");
 
             menuService.initMenu();
         }
 
-        if (productService.findAll().isEmpty()){
+        if (productService.findAll().isEmpty()) {
             // 测试成功控制台输出“product is empty”
             //System.out.println("product is empty");
 
             productService.initProduct();
+        }
+
+        if (fertilizerService.findAll().isEmpty()) {
+            // 测试成功控制台输出“product is empty”
+            //System.out.println("product is empty");
+
+            fertilizerService.initFertilizer();
         }
     }
 }

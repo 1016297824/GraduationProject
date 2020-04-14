@@ -3,6 +3,7 @@ package com.graduationproject.graduationproject.controller;
 import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
+import com.graduationproject.graduationproject.repository.FertilizerRepository;
 import com.graduationproject.graduationproject.repository.ProductRepository;
 import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class FarmStaffController {
 
     @Autowired
     private PurchaseService purchaseService;
+
+    @Autowired
+    private FertilizerService fertilizerService;
 
     @PostMapping("/initProduct")
     private Map initProduct(@RequestBody String productType) {
@@ -302,7 +306,7 @@ public class FarmStaffController {
         purchase1.setProduct(product);
         purchaseService.save(purchase1);
 
-        return Map.of("message","提交成功！");
+        return Map.of("message", "提交成功！");
     }
 
     @PostMapping("produce1")
@@ -314,7 +318,7 @@ public class FarmStaffController {
         Product product1 = productService.findByName(product.getName());
         if (product.getProductType().equals(Product.productType1)) {
             product1.setAmount(product1.getAmount() + product.getAmount());
-            product1.setBaseAmount(product1.getBaseAmount()-product.getAmount());
+            product1.setBaseAmount(product1.getBaseAmount() - product.getAmount());
         } else if (product.getProductType().equals(Product.productType2)) {
             product1.setAmount(product.getAmount() + product1.getAmount());
         } else if (product.getProductType().equals(Product.productType3)) {
@@ -325,5 +329,139 @@ public class FarmStaffController {
         productService.save(product1);
 
         return Map.of("message", message);
+    }
+
+    @PostMapping("initFertilizer")
+    public Map initFertilizer(@RequestBody String fertilizerType) {
+        //System.out.println("post success!" + fertilizerType);
+
+        int page = 1;
+        int pages = 0;
+        List<Integer> pageList = new ArrayList<Integer>();
+        List<Fertilizer> fertilizerList = new ArrayList<Fertilizer>();
+
+        fertilizerList = fertilizerService.findByFertilizerType(fertilizerType);
+        if (fertilizerList.size() / 5 >= 5) {
+            for (int i = 0; i < 5; i++) {
+                pageList.add(i + 1);
+            }
+
+            if (fertilizerList.size() % 5 != 0) {
+                pages = (fertilizerList.size() + 5) / 5;
+            } else {
+                pages = fertilizerList.size() / 5;
+            }
+            fertilizerList = fertilizerList.subList(0, 5);
+        } else {
+            if (!fertilizerList.isEmpty()) {
+                if (fertilizerList.size() % 5 != 0) {
+                    pages = (fertilizerList.size() + 5) / 5;
+                } else {
+                    pages = fertilizerList.size() / 5;
+                }
+
+                for (int i = 0; i < pages; i++) {
+                    pageList.add(i + 1);
+                }
+
+                if (fertilizerList.size() < 5) {
+                    fertilizerList = fertilizerList.subList(0, fertilizerList.size());
+                } else {
+                    fertilizerList = fertilizerList.subList(0, 5);
+                }
+            }
+        }
+
+        PageBody1 pageBody1 = new PageBody1();
+        pageBody1.setPage(page);
+        pageBody1.setPages(pages);
+        pageBody1.setPageList(pageList);
+
+        return Map.of("fertilizerList", fertilizerList, "pageBody1", pageBody1);
+    }
+
+    @PostMapping("/doPage1/{fertilizerType}")
+    // 肥料饲料分页
+    public Map doPage1(@RequestBody PageBody1 pageBody1,
+                       @PathVariable String fertilizerType) {
+        //System.out.println("post success!" + pageBody1.getPage() + productType);
+
+        List<Integer> pageList = new ArrayList<Integer>();
+        List<Fertilizer> fertilizerList = new ArrayList<Fertilizer>();
+
+        fertilizerList = fertilizerService.findByFertilizerType(fertilizerType);
+        if (fertilizerList.isEmpty()) {
+            pageBody1.setPage(0);
+            pageBody1.setPages(0);
+            pageBody1.setPageList(pageList);
+        } else {
+            if ((double) fertilizerList.size() / 5 > 5.0) {
+                if (fertilizerList.size() % 5 != 0) {
+                    pageBody1.setPages((fertilizerList.size() + 5) / 5);
+                } else {
+                    pageBody1.setPages(fertilizerList.size() / 5);
+                }
+
+                if (pageBody1.getPage() <= pageBody1.getPages()) {
+                    if (pageBody1.getPage() + 2 > pageBody1.getPages()) {
+                        for (int i = pageBody1.getPages() - 5; i < pageBody1.getPages(); i++) {
+                            pageList.add(i + 1);
+                        }
+                    } else {
+                        pageList.add(pageBody1.getPage() - 2);
+                        pageList.add(pageBody1.getPage() - 1);
+                        pageList.add(pageBody1.getPage());
+                        pageList.add(pageBody1.getPage() + 1);
+                        pageList.add(pageBody1.getPage() + 2);
+                    }
+                } else {
+                    pageBody1.setPage(pageBody1.getPages());
+                    for (int i = pageBody1.getPages() - 5; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                }
+            } else {
+                if (fertilizerList.size() % 5 != 0) {
+                    pageBody1.setPages((fertilizerList.size() + 5) / 5);
+                } else {
+                    pageBody1.setPages(fertilizerList.size() / 5);
+                }
+
+                if (pageBody1.getPage() <= pageBody1.getPages()) {
+                    for (int i = 0; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                } else {
+                    pageBody1.setPage(pageBody1.getPages());
+                    for (int i = 0; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                }
+            }
+
+            fertilizerList = fertilizerList.subList(pageBody1.getPage() * 5 - 5, pageBody1.getPage() * 5 > fertilizerList.size() ? fertilizerList.size() : pageBody1.getPage() * 5);
+            pageBody1.setPageList(pageList);
+        }
+
+        return Map.of("fertilizerList", fertilizerList, "pageBody1", pageBody1);
+    }
+
+    @PostMapping("addPurchase1")
+    // 采购饲料肥料
+    public Map addPurchase1(@RequestBody Purchase purchase) {
+        //System.out.println("post success!" + purchase.getAmount() + purchase.getPrice() + purchase.getProduct().getName());
+
+        Purchase purchase1 = new Purchase();
+
+        Fertilizer fertilizer = fertilizerService.findByName(purchase.getFertilizer().getName());
+        fertilizer.setAmount(fertilizer.getAmount() + purchase.getAmount());
+        fertilizerService.save(fertilizer);
+
+        purchase1.setAmount(purchase.getAmount());
+        purchase1.setPrice(purchase.getPrice());
+        purchase1.setFertilizer(fertilizer);
+        purchaseService.save(purchase1);
+
+        return Map.of("message", "提交成功！");
     }
 }

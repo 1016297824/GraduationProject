@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,6 +37,9 @@ public class Fertilizer {
 
     // 类型
     private String fertilizerType;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Purchase> purchaseList;
 
     public Fertilizer(String name, double amount, double safeAmount, String unit, String fertilizerType) {
 
