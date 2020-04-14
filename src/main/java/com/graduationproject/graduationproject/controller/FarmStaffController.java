@@ -464,4 +464,26 @@ public class FarmStaffController {
 
         return Map.of("message", "提交成功！");
     }
+
+    @PostMapping("abnormalConsumptionFertilizer")
+    public Map abnormalConsumptionFertilizer(@RequestBody Fertilizer fertilizer) {
+        //System.out.println("post success!" + fertilizer.getAmount());
+
+        Fertilizer fertilizer1 = fertilizerService.findByName(fertilizer.getName());
+        fertilizer1.setAmount(fertilizer1.getAmount() - fertilizer.getAmount());
+        fertilizerService.save(fertilizer1);
+
+        return Map.of("message", "提交成功！");
+    }
+
+    @PostMapping("farmUse")
+    public Map farmUse(@RequestBody Fertilizer fertilizer) {
+        //System.out.println("post success!" + fertilizer.getAmount());
+
+        Fertilizer fertilizer1 = fertilizerService.findByName(fertilizer.getName());
+        fertilizer1.setAmount(fertilizer1.getAmount() - fertilizer.getAmount());
+        fertilizerService.save(fertilizer1);
+
+        return Map.of("message", "提交成功！");
+    }
 }
