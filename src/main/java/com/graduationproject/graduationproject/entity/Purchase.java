@@ -37,4 +37,7 @@ public class Purchase {
 
     @ManyToOne
     private Fertilizer fertilizer;
+
+    @ManyToOne
+    private RestaurantMaterial restaurantMaterial;
 }

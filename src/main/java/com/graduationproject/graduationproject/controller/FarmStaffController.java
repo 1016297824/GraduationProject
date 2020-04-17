@@ -44,6 +44,9 @@ public class FarmStaffController {
     @Autowired
     private FertilizerService fertilizerService;
 
+    @Autowired
+    private RestaurantMaterialService restaurantMaterialService;
+
     @PostMapping("/initProduct")
     private Map initProduct(@RequestBody String productType) {
         //System.out.println("post success!" + productType);
@@ -486,4 +489,155 @@ public class FarmStaffController {
 
         return Map.of("message", "提交成功！");
     }
+
+    @PostMapping("addFertilizer")
+    public Map addFertilizer(@RequestBody Fertilizer fertilizer) {
+        //System.out.println("post success!" + fertilizer.getName());
+
+        Fertilizer fertilizer1 = fertilizerService.findByName(fertilizer.getName());
+        if (fertilizer1 != null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "该" + fertilizer.getFertilizerType() + "已存在！");
+        }
+
+        fertilizerService.save(fertilizer);
+
+        return Map.of("message", "添加成功！");
+    }
+
+    @PostMapping("deleteFertilizer")
+    public Map deleteFertilizer(@RequestBody Fertilizer fertilizer) {
+        //System.out.println("post success!" + fertilizer.getId() + fertilizer.getName());
+
+        fertilizerService.deleteFertilizer(fertilizer);
+
+        return Map.of("message", "删除成功！");
+    }
+
+    @PostMapping("addRestaurantMaterial")
+    public Map addRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
+        //System.out.println("post success!"+restaurantMaterial.getName());
+
+        if (restaurantMaterialService.findByName(restaurantMaterial.getName()) != null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "该餐厅物资已存在！");
+        }
+        restaurantMaterialService.save(restaurantMaterial);
+
+        return Map.of("message", "添加成功！");
+    }
+
+    @GetMapping("initRestaurantMaterial")
+    public Map initRestaurantMaterial() {
+        //System.out.println("get success!");
+
+        int page = 1;
+        int pages = 0;
+        List<Integer> pageList = new ArrayList<Integer>();
+        List<RestaurantMaterial> restaurantMaterialList = new ArrayList<RestaurantMaterial>();
+
+        restaurantMaterialList = restaurantMaterialService.findAll();
+        if (restaurantMaterialList.size() / 5 >= 5) {
+            for (int i = 0; i < 5; i++) {
+                pageList.add(i + 1);
+            }
+
+            if (restaurantMaterialList.size() % 5 != 0) {
+                pages = (restaurantMaterialList.size() + 5) / 5;
+            } else {
+                pages = restaurantMaterialList.size() / 5;
+            }
+            restaurantMaterialList = restaurantMaterialList.subList(0, 5);
+        } else {
+            if (!restaurantMaterialList.isEmpty()) {
+                if (restaurantMaterialList.size() % 5 != 0) {
+                    pages = (restaurantMaterialList.size() + 5) / 5;
+                } else {
+                    pages = restaurantMaterialList.size() / 5;
+                }
+
+                for (int i = 0; i < pages; i++) {
+                    pageList.add(i + 1);
+                }
+
+                if (restaurantMaterialList.size() < 5) {
+                    restaurantMaterialList = restaurantMaterialList.subList(0, restaurantMaterialList.size());
+                } else {
+                    restaurantMaterialList = restaurantMaterialList.subList(0, 5);
+                }
+            }
+        }
+
+        PageBody1 pageBody1 = new PageBody1();
+        pageBody1.setPage(page);
+        pageBody1.setPages(pages);
+        pageBody1.setPageList(pageList);
+
+        return Map.of("restaurantMaterialList", restaurantMaterialList, "pageBody1", pageBody1);
+    }
+
+    @PostMapping("/doPage2")
+    // 餐厅物资分页
+    public Map doPage2(@RequestBody PageBody1 pageBody1) {
+        //System.out.println("post success!" + pageBody1.getPage() + productType);
+
+        List<Integer> pageList = new ArrayList<Integer>();
+        List<RestaurantMaterial> restaurantMaterialList = new ArrayList<RestaurantMaterial>();
+
+        restaurantMaterialList = restaurantMaterialService.findAll();
+        if (restaurantMaterialList.isEmpty()) {
+            pageBody1.setPage(0);
+            pageBody1.setPages(0);
+            pageBody1.setPageList(pageList);
+        } else {
+            if ((double) restaurantMaterialList.size() / 5 > 5.0) {
+                if (restaurantMaterialList.size() % 5 != 0) {
+                    pageBody1.setPages((restaurantMaterialList.size() + 5) / 5);
+                } else {
+                    pageBody1.setPages(restaurantMaterialList.size() / 5);
+                }
+
+                if (pageBody1.getPage() <= pageBody1.getPages()) {
+                    if (pageBody1.getPage() + 2 > pageBody1.getPages()) {
+                        for (int i = pageBody1.getPages() - 5; i < pageBody1.getPages(); i++) {
+                            pageList.add(i + 1);
+                        }
+                    } else {
+                        pageList.add(pageBody1.getPage() - 2);
+                        pageList.add(pageBody1.getPage() - 1);
+                        pageList.add(pageBody1.getPage());
+                        pageList.add(pageBody1.getPage() + 1);
+                        pageList.add(pageBody1.getPage() + 2);
+                    }
+                } else {
+                    pageBody1.setPage(pageBody1.getPages());
+                    for (int i = pageBody1.getPages() - 5; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                }
+            } else {
+                if (restaurantMaterialList.size() % 5 != 0) {
+                    pageBody1.setPages((restaurantMaterialList.size() + 5) / 5);
+                } else {
+                    pageBody1.setPages(restaurantMaterialList.size() / 5);
+                }
+
+                if (pageBody1.getPage() <= pageBody1.getPages()) {
+                    for (int i = 0; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                } else {
+                    pageBody1.setPage(pageBody1.getPages());
+                    for (int i = 0; i < pageBody1.getPages(); i++) {
+                        pageList.add(i + 1);
+                    }
+                }
+            }
+
+            restaurantMaterialList = restaurantMaterialList.subList(pageBody1.getPage() * 5 - 5, pageBody1.getPage() * 5 > restaurantMaterialList.size() ? restaurantMaterialList.size() : pageBody1.getPage() * 5);
+            pageBody1.setPageList(pageList);
+        }
+
+        return Map.of("restaurantMaterialList", restaurantMaterialList, "pageBody1", pageBody1);
+    }
+
+
 }

@@ -38,7 +38,7 @@ public class Fertilizer {
     // 类型
     private String fertilizerType;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "fertilizer", cascade = CascadeType.REMOVE)
     private List<Purchase> purchaseList;
 
     public Fertilizer(String name, double amount, double safeAmount, String unit, String fertilizerType) {

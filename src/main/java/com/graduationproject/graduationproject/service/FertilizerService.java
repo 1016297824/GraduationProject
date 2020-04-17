@@ -41,6 +41,12 @@ public class FertilizerService {
         fertilizerRepository.save(fertilizer);
     }
 
+    // 删除饲料肥料信息
+    public void deleteFertilizer(Fertilizer fertilizer) {
+
+        fertilizerRepository.delete(fertilizer);
+    }
+
     // 初始化饲料肥料表
     public void initFertilizer() {
 
