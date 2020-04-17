@@ -469,6 +469,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("abnormalConsumptionFertilizer")
+    // 消耗饲料肥料
     public Map abnormalConsumptionFertilizer(@RequestBody Fertilizer fertilizer) {
         //System.out.println("post success!" + fertilizer.getAmount());
 
@@ -480,6 +481,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("farmUse")
+    // 使用饲料肥料
     public Map farmUse(@RequestBody Fertilizer fertilizer) {
         //System.out.println("post success!" + fertilizer.getAmount());
 
@@ -491,6 +493,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("addFertilizer")
+    // 添加饲料肥料
     public Map addFertilizer(@RequestBody Fertilizer fertilizer) {
         //System.out.println("post success!" + fertilizer.getName());
 
@@ -505,6 +508,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("deleteFertilizer")
+    // 删除饲料肥料
     public Map deleteFertilizer(@RequestBody Fertilizer fertilizer) {
         //System.out.println("post success!" + fertilizer.getId() + fertilizer.getName());
 
@@ -639,5 +643,20 @@ public class FarmStaffController {
         return Map.of("restaurantMaterialList", restaurantMaterialList, "pageBody1", pageBody1);
     }
 
+    @PostMapping("addRestaurantMaterialPurchase")
+    public Map addRestaurantMaterialPurchase(@RequestBody Purchase purchase) {
+        //System.out.println("post success!" + purchase.getRestaurantMaterial().getName());
 
+        RestaurantMaterial restaurantMaterial = restaurantMaterialService.findByName(purchase.getRestaurantMaterial().getName());
+        restaurantMaterial.setAmount(restaurantMaterial.getAmount() + purchase.getAmount());
+        restaurantMaterialService.save(restaurantMaterial);
+
+        Purchase purchase1 = new Purchase();
+        purchase1.setAmount(purchase.getAmount());
+        purchase1.setPrice(purchase.getPrice());
+        purchase1.setRestaurantMaterial(purchase.getRestaurantMaterial());
+        purchaseService.save(purchase1);
+
+        return Map.of("message", "提交成功！");
+    }
 }
