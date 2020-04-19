@@ -32,4 +32,10 @@ public class RestaurantMaterialService {
 
         return restaurantMaterialRepository.findByName(name);
     }
+
+    // 删除餐厅物资信息
+    public void delete(RestaurantMaterial restaurantMaterial) {
+
+        restaurantMaterialRepository.delete(restaurantMaterial);
+    }
 }

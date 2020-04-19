@@ -335,6 +335,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("initFertilizer")
+    // 初始化饲料肥料
     public Map initFertilizer(@RequestBody String fertilizerType) {
         //System.out.println("post success!" + fertilizerType);
 
@@ -518,6 +519,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("addRestaurantMaterial")
+    // 添加餐厅物资
     public Map addRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
         //System.out.println("post success!"+restaurantMaterial.getName());
 
@@ -530,6 +532,7 @@ public class FarmStaffController {
     }
 
     @GetMapping("initRestaurantMaterial")
+    // 初始化餐厅物资
     public Map initRestaurantMaterial() {
         //System.out.println("get success!");
 
@@ -644,6 +647,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("addRestaurantMaterialPurchase")
+    // 餐厅物资采购
     public Map addRestaurantMaterialPurchase(@RequestBody Purchase purchase) {
         //System.out.println("post success!" + purchase.getRestaurantMaterial().getName());
 
@@ -658,5 +662,25 @@ public class FarmStaffController {
         purchaseService.save(purchase1);
 
         return Map.of("message", "提交成功！");
+    }
+
+    @PostMapping("deleteRestaurantMaterial")
+    public Map deleteRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
+        //System.out.println("post success!" + restaurantMaterial.getName());
+
+        restaurantMaterialService.delete(restaurantMaterial);
+
+        return Map.of("message", "删除成功！");
+    }
+
+    @PostMapping("consumptionRestaurantMaterial")
+    public Map consumptionRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
+        //System.out.println("post success!" + restaurantMaterial.getAmount());
+
+        RestaurantMaterial restaurantMaterial1 = restaurantMaterialService.findByName(restaurantMaterial.getName());
+        restaurantMaterial1.setAmount(restaurantMaterial1.getAmount() - restaurantMaterial.getAmount());
+        restaurantMaterialService.save(restaurantMaterial1);
+
+        return Map.of("message", "已提交！");
     }
 }
