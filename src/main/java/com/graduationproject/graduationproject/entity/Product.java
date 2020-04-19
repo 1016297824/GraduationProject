@@ -55,6 +55,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<Purchase> purchaseList;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Sale> saleList;
+
     public Product(String name, String unit, double amount, double safeAmount, String productType, double baseAmount, String baseUnit) {
 
         this.name = name;

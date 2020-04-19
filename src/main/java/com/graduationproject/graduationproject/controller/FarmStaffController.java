@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -229,12 +230,16 @@ public class FarmStaffController {
 
         String message = "提交成功！";
         Product product1 = productService.findByName(product.getName());
+
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(product.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(product1.getAmount()));
+        BigDecimal bigDecimal2 = new BigDecimal(Double.toString(product1.getBaseAmount()));
         if (product.getProductType().equals(Product.productType1)) {
-            product1.setAmount(product1.getAmount() - product.getAmount());
+            product1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType2)) {
-            product1.setAmount(product1.getAmount() - product.getAmount());
+            product1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType3)) {
-            product1.setAmount(product1.getAmount() - product.getAmount());
+            product1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
         }
@@ -250,12 +255,16 @@ public class FarmStaffController {
 
         String message = "提交成功！";
         Product product1 = productService.findByName(product.getName());
+
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(product.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(product1.getAmount()));
+        BigDecimal bigDecimal2 = new BigDecimal(Double.toString(product1.getBaseAmount()));
         if (product.getProductType().equals(Product.productType1)) {
-            product1.setBaseAmount(product1.getBaseAmount() + product.getAmount());
+            product1.setBaseAmount(bigDecimal2.add(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType2)) {
-            product1.setAmount(product.getAmount() + product1.getAmount());
+            product1.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType3)) {
-            product1.setAmount(product.getAmount() + product1.getAmount());
+            product1.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
         }
@@ -271,12 +280,16 @@ public class FarmStaffController {
 
         String message = "提交成功！";
         Product product1 = productService.findByName(product.getName());
+
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(product.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(product1.getAmount()));
+        BigDecimal bigDecimal2 = new BigDecimal(Double.toString(product1.getBaseAmount()));
         if (product.getProductType().equals(Product.productType1)) {
-            product1.setBaseAmount(product1.getBaseAmount() - product.getAmount());
+            product1.setBaseAmount(bigDecimal2.subtract(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType2)) {
-            product1.setAmount(product1.getAmount() - product.getAmount());
+            product1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType3)) {
-            product1.setBaseAmount(product1.getBaseAmount() - product.getAmount());
+            product1.setBaseAmount(bigDecimal2.subtract(bigDecimal).doubleValue());
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
         }
@@ -293,12 +306,15 @@ public class FarmStaffController {
         Purchase purchase1 = new Purchase();
         Product product = productService.findByName(purchase.getProduct().getName());
 
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(purchase.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(product.getAmount()));
+        BigDecimal bigDecimal2 = new BigDecimal(Double.toString(product.getBaseAmount()));
         if (product.getProductType().equals(Product.productType1)) {
-            product.setBaseAmount(product.getBaseAmount() + purchase.getAmount());
+            product.setBaseAmount(bigDecimal2.add(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType2)) {
-            product.setAmount(product.getAmount() + purchase.getAmount());
+            product.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType3)) {
-            product.setBaseAmount(product.getBaseAmount() + purchase.getAmount());
+            product.setBaseAmount(bigDecimal2.add(bigDecimal).doubleValue());
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
         }
@@ -319,13 +335,16 @@ public class FarmStaffController {
 
         String message = "提交成功！";
         Product product1 = productService.findByName(product.getName());
+        BigDecimal bigDecimal = new BigDecimal(product.getAmount());
+        BigDecimal bigDecimal1 = new BigDecimal(product1.getAmount());
+        BigDecimal bigDecimal2 = new BigDecimal(product1.getBaseAmount());
         if (product.getProductType().equals(Product.productType1)) {
-            product1.setAmount(product1.getAmount() + product.getAmount());
-            product1.setBaseAmount(product1.getBaseAmount() - product.getAmount());
+            product1.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
+            product1.setBaseAmount(bigDecimal2.subtract(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType2)) {
-            product1.setAmount(product.getAmount() + product1.getAmount());
+            product1.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
         } else if (product.getProductType().equals(Product.productType3)) {
-            product1.setAmount(product.getAmount() + product1.getAmount());
+            product1.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "产品类型错误！");
         }
@@ -458,7 +477,9 @@ public class FarmStaffController {
         Purchase purchase1 = new Purchase();
 
         Fertilizer fertilizer = fertilizerService.findByName(purchase.getFertilizer().getName());
-        fertilizer.setAmount(fertilizer.getAmount() + purchase.getAmount());
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(purchase.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(fertilizer.getAmount()));
+        fertilizer.setAmount(bigDecimal.add(bigDecimal1).doubleValue());
         fertilizerService.save(fertilizer);
 
         purchase1.setAmount(purchase.getAmount());
@@ -475,7 +496,9 @@ public class FarmStaffController {
         //System.out.println("post success!" + fertilizer.getAmount());
 
         Fertilizer fertilizer1 = fertilizerService.findByName(fertilizer.getName());
-        fertilizer1.setAmount(fertilizer1.getAmount() - fertilizer.getAmount());
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(fertilizer.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(fertilizer1.getAmount()));
+        fertilizer1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         fertilizerService.save(fertilizer1);
 
         return Map.of("message", "提交成功！");
@@ -487,7 +510,9 @@ public class FarmStaffController {
         //System.out.println("post success!" + fertilizer.getAmount());
 
         Fertilizer fertilizer1 = fertilizerService.findByName(fertilizer.getName());
-        fertilizer1.setAmount(fertilizer1.getAmount() - fertilizer.getAmount());
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(fertilizer.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(fertilizer1.getAmount()));
+        fertilizer1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         fertilizerService.save(fertilizer1);
 
         return Map.of("message", "提交成功！");
@@ -652,7 +677,9 @@ public class FarmStaffController {
         //System.out.println("post success!" + purchase.getRestaurantMaterial().getName());
 
         RestaurantMaterial restaurantMaterial = restaurantMaterialService.findByName(purchase.getRestaurantMaterial().getName());
-        restaurantMaterial.setAmount(restaurantMaterial.getAmount() + purchase.getAmount());
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(purchase.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(restaurantMaterial.getAmount()));
+        restaurantMaterial.setAmount(bigDecimal1.add(bigDecimal).doubleValue());
         restaurantMaterialService.save(restaurantMaterial);
 
         Purchase purchase1 = new Purchase();
@@ -665,6 +692,7 @@ public class FarmStaffController {
     }
 
     @PostMapping("deleteRestaurantMaterial")
+    // 删除餐厅物资信息
     public Map deleteRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
         //System.out.println("post success!" + restaurantMaterial.getName());
 
@@ -674,13 +702,32 @@ public class FarmStaffController {
     }
 
     @PostMapping("consumptionRestaurantMaterial")
+    // 餐厅物资异常消耗
     public Map consumptionRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
         //System.out.println("post success!" + restaurantMaterial.getAmount());
 
         RestaurantMaterial restaurantMaterial1 = restaurantMaterialService.findByName(restaurantMaterial.getName());
-        restaurantMaterial1.setAmount(restaurantMaterial1.getAmount() - restaurantMaterial.getAmount());
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(restaurantMaterial.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(restaurantMaterial1.getAmount()));
+        restaurantMaterial1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
         restaurantMaterialService.save(restaurantMaterial1);
 
         return Map.of("message", "已提交！");
     }
+
+    @PostMapping("useRestaurantMaterial")
+    // 餐厅物资使用
+    public Map useRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
+        //System.out.println("post success!" + restaurantMaterial.getAmount());
+
+        RestaurantMaterial restaurantMaterial1 = restaurantMaterialService.findByName(restaurantMaterial.getName());
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(restaurantMaterial1.getAmount()));
+        BigDecimal bigDecimal1 = new BigDecimal(Double.toString(restaurantMaterial.getAmount()));
+        restaurantMaterial1.setAmount(bigDecimal1.subtract(bigDecimal).doubleValue());
+        restaurantMaterialService.save(restaurantMaterial1);
+
+        return Map.of("message", "已提交！");
+    }
+
+
 }
