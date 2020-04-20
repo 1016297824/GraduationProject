@@ -48,6 +48,12 @@ public class FarmStaffController {
     @Autowired
     private RestaurantMaterialService restaurantMaterialService;
 
+    @Autowired
+    private SaleNoService saleNoService;
+
+    @Autowired
+    private SaleService saleService;
+
     @PostMapping("/initProduct")
     private Map initProduct(@RequestBody String productType) {
         //System.out.println("post success!" + productType);
@@ -729,5 +735,41 @@ public class FarmStaffController {
         return Map.of("message", "已提交！");
     }
 
+    @PostMapping("addSaleList")
+    //
+    public Map addSaleList(@RequestBody List<Sale> saleList) {
+        //System.out.println("post success!" + saleList.get(0).getProduct().getName());
 
+        int count = saleNoService.getCount();
+        SaleNo saleNo = new SaleNo();
+        if (count == 0) {
+            saleNo.setNo("00001");
+        } else {
+            int maxNO = saleNoService.getMaxNO();
+            saleNo.setNo(String.format("%5d", maxNO).replace(" ", "0"));
+            SaleNo saleNo1 = saleNoService.findByNo(saleNo.getNo());
+            saleNoService.deleteSaleNo(saleNo1);
+        }
+        saleNoService.save(saleNo);
+
+        SaleNo saleNo2 = new SaleNo();
+        saleNo2.setNo(String.format("%5d", (Integer.valueOf(saleNo.getNo()).intValue() + 1)).replace(" ", "0"));
+        saleNoService.save(saleNo2);
+
+        SaleNo saleNo3 = saleNoService.findByNo(saleNo.getNo());
+
+        for (Sale sale : saleList) {
+            Product product = productService.findByName(sale.getProduct().getName());
+            BigDecimal bigDecimal = new BigDecimal(Double.toString(product.getAmount()));
+            BigDecimal bigDecimal1 = new BigDecimal(Double.toString(sale.getAmount()));
+            product.setAmount(bigDecimal.subtract(bigDecimal1).doubleValue());
+            productService.save(product);
+
+            sale.setSaleNo(saleNo3);
+        }
+
+        saleService.saveAll(saleList);
+
+        return Map.of("message", "提交成功！");
+    }
 }

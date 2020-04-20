@@ -265,15 +265,23 @@ public class CustomerController {
         if (count == 0) {
             reserve.setNo("00001");
         } else {
-            int maxNo = reserveService.getMaxNo() + 1;
+            int maxNo = reserveService.getMaxNo();
             reserve.setNo(String.format("%5d", maxNo).replace(" ", "0"));
+            Reserve reserve1 = reserveService.findByNo(reserve.getNo());
+            reserveService.deleteReserve(reserve1);
         }
         reserve.setCustomer(customer);
         reserve.setDiningTable(diningTable);
         reserve.setStartTime(pageBody.getStartTime());
         reserve.setEndTime(pageBody.getEndTime());
-
         reserveService.save(reserve);
+
+        LocalDateTime localDateTime = LocalDateTime.now().withHour(0);
+        Reserve reserve2 = new Reserve();
+        reserve2.setNo(String.format("%5d", (Integer.valueOf(reserve.getNo()).intValue() + 1)).replace(" ", "0"));
+        reserve2.setStartTime(localDateTime);
+        reserve2.setEndTime(localDateTime);
+        reserveService.save(reserve2);
 
         return Map.of("message", "预定成功！");
     }

@@ -37,4 +37,7 @@ public interface ReserveRepository extends CustomizedRepository<Reserve, Integer
 
     @Query("from Reserve")
     List<Reserve> findAll();
+
+    @Query("select r from Reserve r where r.customer is not null")
+    List<Reserve> findAllCustomerNotNull();
 }

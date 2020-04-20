@@ -50,7 +50,7 @@ public class RestaurantStaffController {
         List<Integer> pageList = new ArrayList<Integer>();
 
         List<Reserve> reserveList = new ArrayList<Reserve>();
-        reserveList = reserveService.findAll();
+        reserveList = reserveService.findAllCustomerNotNull();
 
         if (reserveList.size() / 5 >= 5) {
             for (int i = 0; i < 5; i++) {
@@ -99,7 +99,7 @@ public class RestaurantStaffController {
         List<Integer> pageList = new ArrayList<Integer>();
         List<Reserve> reserveList = new ArrayList<Reserve>();
 
-        reserveList = reserveService.findAll();
+        reserveList = reserveService.findAllCustomerNotNull();
         if (reserveList.isEmpty()) {
             pageBody1.setPage(0);
             pageBody1.setPages(0);

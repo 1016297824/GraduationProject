@@ -58,7 +58,7 @@ public class ReserveService {
     // 存入订单信息
     public void save(Reserve reserve) {
 
-        reserveRepository.saveAndFlush(reserve);
+        reserveRepository.save(reserve);
     }
 
     // 查询过期订单
@@ -71,5 +71,11 @@ public class ReserveService {
     public List<Reserve> findAll() {
 
         return reserveRepository.findAll();
+    }
+
+    // 查询所有用户订单
+    public List<Reserve> findAllCustomerNotNull() {
+
+        return reserveRepository.findAllCustomerNotNull();
     }
 }
