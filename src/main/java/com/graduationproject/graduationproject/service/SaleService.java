@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,5 +20,11 @@ public class SaleService {
     public void saveAll(List<Sale> saleList) {
 
         saleRepository.saveAll(saleList);
+    }
+
+    // 通过日期获得销售信息
+    public List<Sale> findByDay(LocalDateTime startTime, LocalDateTime endTime) {
+
+        return saleRepository.findByDay(startTime, endTime);
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -315,19 +316,36 @@ public class RestaurantManagerController {
 
         LocalDateTime choosedDate1 = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
         choosedDate1 = choosedDate1.withHour(0);
+        choosedDate1 = choosedDate1.withMinute(0);
+        choosedDate1 = choosedDate1.withSecond(0);
+        choosedDate1 = choosedDate1.withNano(0);
         LocalDateTime choosedDate2 = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
         choosedDate2 = choosedDate2.withHour(23);
+        choosedDate2 = choosedDate2.withMinute(0);
+        choosedDate2 = choosedDate2.withSecond(0);
+        choosedDate2 = choosedDate2.withNano(0);
         days = choosedDate2.getDayOfMonth();
+        choosedDate2 = choosedDate2.plusHours(1);
         attendanceList = attendanceService.findRestaurantStaffByChooseTime(choosedDate1, choosedDate2);
 
         for (Staff staff : staffList) {
             AttendanceExcel attendanceExcel = new AttendanceExcel(0, 12 * days, staff);
             for (Attendance attendance : attendanceList) {
                 if (attendance.getStaff().getUsername().equals(staff.getUsername())) {
-                    attendanceExcel.setWorkingHours(attendanceExcel.getWorkingHours() + attendance.getWorkingHours());
+                    BigDecimal totalWorkingHours = new BigDecimal(Double.toString(attendanceExcel.getWorkingHours()));
+                    BigDecimal workingHours = new BigDecimal(Double.toString(attendance.getWorkingHours()));
+                    attendanceExcel.setWorkingHours(totalWorkingHours.add(workingHours).doubleValue());
                 }
             }
-            attendanceExcel.setTrueSalary(attendanceExcel.getWorkingHours() / attendanceExcel.getTotalWorkingHours() * attendanceExcel.getStaff().getPosition().getBasicSalary());
+
+
+            BigDecimal workingHours = new BigDecimal(Double.toString(attendanceExcel.getWorkingHours()));
+            BigDecimal totalWorkingHours = new BigDecimal(Double.toString(attendanceExcel.getTotalWorkingHours()));
+            BigDecimal basicSalary = new BigDecimal(Double.toString(attendanceExcel.getStaff().getPosition().getBasicSalary()));
+            double totalSalary = workingHours.multiply(basicSalary).doubleValue();
+            BigDecimal totalSalary1 = new BigDecimal(Double.toString(totalSalary));
+            double trueSalary = totalSalary1.divide(totalWorkingHours, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            attendanceExcel.setTrueSalary(trueSalary);
             attendanceExcelList.add(attendanceExcel);
         }
 

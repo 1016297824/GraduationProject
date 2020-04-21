@@ -3,12 +3,14 @@ package com.graduationproject.graduationproject.controller;
 import com.graduationproject.graduationproject.component.ExcelComponent;
 import com.graduationproject.graduationproject.entity.Attendance;
 import com.graduationproject.graduationproject.entity.Position;
+import com.graduationproject.graduationproject.entity.Sale;
 import com.graduationproject.graduationproject.entity.Staff;
 import com.graduationproject.graduationproject.entity.body.AttendanceExcel;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
 import com.graduationproject.graduationproject.service.AttendanceService;
 import com.graduationproject.graduationproject.service.PositionService;
+import com.graduationproject.graduationproject.service.SaleService;
 import com.graduationproject.graduationproject.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -45,6 +48,9 @@ public class FarmManagerController {
 
     @Autowired
     private AttendanceService attendanceService;
+
+    @Autowired
+    private SaleService saleService;
 
     @GetMapping("/getStaff")
     // 获得员工信息
@@ -313,23 +319,58 @@ public class FarmManagerController {
 
         LocalDateTime choosedDate1 = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
         choosedDate1 = choosedDate1.withHour(0);
+        choosedDate1 = choosedDate1.withMinute(0);
+        choosedDate1 = choosedDate1.withSecond(0);
+        choosedDate1 = choosedDate1.withNano(0);
         LocalDateTime choosedDate2 = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
         choosedDate2 = choosedDate2.withHour(23);
+        choosedDate2 = choosedDate2.withMinute(0);
+        choosedDate2 = choosedDate2.withSecond(0);
+        choosedDate2 = choosedDate2.withNano(0);
         days = choosedDate2.getDayOfMonth();
+        choosedDate2 = choosedDate2.plusHours(1);
         attendanceList = attendanceService.findFarmStaffByChooseTime(choosedDate1, choosedDate2);
 
         for (Staff staff : staffList) {
             AttendanceExcel attendanceExcel = new AttendanceExcel(0, 12 * days, staff);
             for (Attendance attendance : attendanceList) {
                 if (attendance.getStaff().getUsername().equals(staff.getUsername())) {
-                    attendanceExcel.setWorkingHours(attendanceExcel.getWorkingHours() + attendance.getWorkingHours());
+                    BigDecimal totalWorkingHours = new BigDecimal(Double.toString(attendanceExcel.getWorkingHours()));
+                    BigDecimal workingHours = new BigDecimal(Double.toString(attendance.getWorkingHours()));
+                    attendanceExcel.setWorkingHours(totalWorkingHours.add(workingHours).doubleValue());
                 }
             }
-            attendanceExcel.setTrueSalary(attendanceExcel.getWorkingHours() / attendanceExcel.getTotalWorkingHours() * attendanceExcel.getStaff().getPosition().getBasicSalary());
+
+            BigDecimal workingHours = new BigDecimal(Double.toString(attendanceExcel.getWorkingHours()));
+            BigDecimal totalWorkingHours = new BigDecimal(Double.toString(attendanceExcel.getTotalWorkingHours()));
+            BigDecimal basicSalary = new BigDecimal(Double.toString(attendanceExcel.getStaff().getPosition().getBasicSalary()));
+            double totalSalary = workingHours.multiply(basicSalary).doubleValue();
+            BigDecimal totalSalary1 = new BigDecimal(Double.toString(totalSalary));
+            double trueSalary = totalSalary1.divide(totalWorkingHours, 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            attendanceExcel.setTrueSalary(trueSalary);
             attendanceExcelList.add(attendanceExcel);
         }
 
         map.put("attendanceExcelList", attendanceExcelList);
         ExcelComponent.exportToExcel(request, response, outFileName, "考勤信息.xls", map);
+    }
+
+    @PostMapping("downloadDaySaleExcel")
+    // 农场日收入Excel
+    public void downloadDaySaleExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) {
+        //System.out.println("post success"+choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = startTime.plusHours(24);
+
+        List<Sale> saleList = saleService.findByDay(startTime, endTime);
     }
 }
