@@ -27,4 +27,10 @@ public class SaleService {
 
         return saleRepository.findByDay(startTime, endTime);
     }
+
+    // 通过销售号获得销售信息
+    public List<Sale> findByNo(String no) {
+
+        return saleRepository.findByNo(no);
+    }
 }

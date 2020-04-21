@@ -1,17 +1,12 @@
 package com.graduationproject.graduationproject.controller;
 
 import com.graduationproject.graduationproject.component.ExcelComponent;
-import com.graduationproject.graduationproject.entity.Attendance;
-import com.graduationproject.graduationproject.entity.Position;
-import com.graduationproject.graduationproject.entity.Sale;
-import com.graduationproject.graduationproject.entity.Staff;
+import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.AttendanceExcel;
+import com.graduationproject.graduationproject.entity.body.FarmSaleExcel;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
-import com.graduationproject.graduationproject.service.AttendanceService;
-import com.graduationproject.graduationproject.service.PositionService;
-import com.graduationproject.graduationproject.service.SaleService;
-import com.graduationproject.graduationproject.service.StaffService;
+import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -51,6 +47,9 @@ public class FarmManagerController {
 
     @Autowired
     private SaleService saleService;
+
+    @Autowired
+    private SaleNoService saleNoService;
 
     @GetMapping("/getStaff")
     // 获得员工信息
@@ -357,7 +356,7 @@ public class FarmManagerController {
 
     @PostMapping("downloadDaySaleExcel")
     // 农场日收入Excel
-    public void downloadDaySaleExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadDaySaleExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
         //System.out.println("post success"+choosedDate);
 
         choosedDate = choosedDate.plusHours(8);
@@ -368,9 +367,38 @@ public class FarmManagerController {
         LocalDateTime startTime = choosedDate.withHour(0);
         startTime = startTime.withMinute(0);
         startTime = startTime.withSecond(0);
-        startTime = startTime.withNano(0);
         LocalDateTime endTime = startTime.plusHours(24);
-
         List<Sale> saleList = saleService.findByDay(startTime, endTime);
+
+        List<SaleNo> saleNoList = new ArrayList<SaleNo>();
+        String temp = "";
+        for (Sale sale : saleList) {
+            if (!sale.getSaleNo().getNo().equals(temp)) {
+                saleNoList.add(sale.getSaleNo());
+                temp = sale.getSaleNo().getNo();
+            }
+        }
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<FarmSaleExcel> farmSaleExcelList = new ArrayList<FarmSaleExcel>();
+        for (SaleNo saleNo : saleNoList) {
+            FarmSaleExcel farmSaleExcel = new FarmSaleExcel();
+            farmSaleExcel.setNo(saleNo.getNo());
+            farmSaleExcel.setInsertTime(format.format(saleNo.getInsertTime()));
+            farmSaleExcel.setTotalPrice(0);
+            for (Sale sale : saleList) {
+                if (sale.getSaleNo().getNo().equals(saleNo.getNo())) {
+                    BigDecimal amount = new BigDecimal(Double.toString(sale.getAmount()));
+                    BigDecimal price = new BigDecimal(Double.toString(sale.getPrice()));
+                    BigDecimal totalPrice = new BigDecimal(Double.toString(farmSaleExcel.getTotalPrice()));
+                    farmSaleExcel.setTotalPrice(amount.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).add(totalPrice).doubleValue());
+                }
+            }
+            farmSaleExcelList.add(farmSaleExcel);
+        }
+
+        Map map = new HashMap();
+        map.put("farmSaleExcelList", farmSaleExcelList);
+        ExcelComponent.exportToExcel(request, response, outFileName, "农场收入.xls", map);
     }
 }

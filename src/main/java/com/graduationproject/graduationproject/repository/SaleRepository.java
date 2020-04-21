@@ -17,4 +17,7 @@ public interface SaleRepository extends CustomizedRepository<Sale, Integer> {
             "and s.saleNo.insertTime<:endTime")
     List<Sale> findByDay(@Param("startTime") LocalDateTime startTime,
                          @Param("endTime") LocalDateTime endTime);
+
+    @Query("select s from  Sale s where s.saleNo.no=:no")
+    List<Sale> findByNo(@Param("no") String no);
 }
