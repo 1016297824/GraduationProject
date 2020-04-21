@@ -3,12 +3,10 @@ package com.graduationproject.graduationproject.controller;
 import com.graduationproject.graduationproject.component.ExcelComponent;
 import com.graduationproject.graduationproject.entity.*;
 import com.graduationproject.graduationproject.entity.body.AttendanceExcel;
+import com.graduationproject.graduationproject.entity.body.FarmSaleExcel;
 import com.graduationproject.graduationproject.entity.body.PageBody1;
 import com.graduationproject.graduationproject.entity.body.UserBody1;
-import com.graduationproject.graduationproject.service.AttendanceService;
-import com.graduationproject.graduationproject.service.PositionService;
-import com.graduationproject.graduationproject.service.RepairService;
-import com.graduationproject.graduationproject.service.StaffService;
+import com.graduationproject.graduationproject.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +46,9 @@ public class RestaurantManagerController {
 
     @Autowired
     private RepairService repairService;
+
+    @Autowired
+    private OrderingCompleteService orderingCompleteService;
 
     @GetMapping("/getStaff")
     // 获得员工信息
@@ -353,4 +354,115 @@ public class RestaurantManagerController {
         ExcelComponent.exportToExcel(request, response, outFileName, "考勤信息.xls", map);
     }
 
+    @PostMapping("downloadDaySaleExcel")
+    // 餐厅日收入Excel
+    public void downloadDaySaleExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success"+choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = startTime.plusHours(24);
+        List<OrderingComplete> orderingCompleteList = orderingCompleteService.findByTime(startTime, endTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Map map = new HashMap();
+        map.put("orderingCompleteList", orderingCompleteList);
+        map.put("format", format);
+        ExcelComponent.exportToExcel(request, response, outFileName, "餐厅收入.xls", map);
+    }
+
+    @PostMapping("downloadMonthSaleExcel")
+    // 餐厅月收入Excel
+    public void downloadMonthSaleExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success"+choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
+        startTime = startTime.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
+        endTime = endTime.withHour(23);
+        endTime = endTime.withMinute(0);
+        endTime = endTime.withSecond(0);
+        endTime = endTime.withNano(0);
+        endTime = endTime.plusHours(1);
+        List<OrderingComplete> orderingCompleteList = orderingCompleteService.findByTime(startTime, endTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Map map = new HashMap();
+        map.put("orderingCompleteList", orderingCompleteList);
+        map.put("format", format);
+        ExcelComponent.exportToExcel(request, response, outFileName, "餐厅收入.xls", map);
+    }
+
+    @PostMapping("downloadDayPurchaseExcel")
+    // 餐厅日支出
+    public void downloadDayPurchaseExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success!" + choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = startTime.plusHours(24);
+        List<Repair> repairList = repairService.findByTime(startTime, endTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Map map = new HashMap();
+        map.put("repairList", repairList);
+        map.put("format", format);
+        ExcelComponent.exportToExcel(request, response, outFileName, "餐厅支出.xls", map);
+    }
+
+    @PostMapping("downloadMonthPurchaseExcel")
+    // 餐厅月支出
+    public void downloadMonthPurchaseExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success!" + choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
+        startTime = startTime.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
+        endTime = endTime.withHour(23);
+        endTime = endTime.withMinute(0);
+        endTime = endTime.withSecond(0);
+        endTime = endTime.withNano(0);
+        endTime = endTime.plusHours(1);
+        List<Repair> repairList = repairService.findByTime(startTime, endTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Map map = new HashMap();
+        map.put("repairList", repairList);
+        map.put("format", format);
+        ExcelComponent.exportToExcel(request, response, outFileName, "餐厅支出.xls", map);
+    }
 }

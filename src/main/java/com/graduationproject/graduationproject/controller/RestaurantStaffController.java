@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +200,10 @@ public class RestaurantStaffController {
 
         double totalPrice = 0.0;
         for (Ordering ordering : orderingList) {
-            totalPrice += ordering.getCount() * ordering.getMenu().getPrice();
+            BigDecimal count = new BigDecimal(Double.toString(ordering.getCount()));
+            BigDecimal price = new BigDecimal(Double.toString(ordering.getMenu().getPrice()));
+            BigDecimal oldTotalPrice = new BigDecimal(Double.toString(totalPrice));
+            totalPrice = count.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).add(oldTotalPrice).doubleValue();
         }
 
         orderingComplete.setTotalPrice(totalPrice);

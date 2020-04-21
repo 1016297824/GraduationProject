@@ -23,9 +23,9 @@ public class SaleService {
     }
 
     // 通过日期获得销售信息
-    public List<Sale> findByDay(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<Sale> findByTime(LocalDateTime startTime, LocalDateTime endTime) {
 
-        return saleRepository.findByDay(startTime, endTime);
+        return saleRepository.findByTime(startTime, endTime);
     }
 
     // 通过销售号获得销售信息

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +51,9 @@ public class FarmManagerController {
 
     @Autowired
     private SaleNoService saleNoService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @GetMapping("/getStaff")
     // 获得员工信息
@@ -362,13 +366,14 @@ public class FarmManagerController {
         choosedDate = choosedDate.plusHours(8);
 
         String outFileName = "";
-        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(choosedDate);
 
         LocalDateTime startTime = choosedDate.withHour(0);
         startTime = startTime.withMinute(0);
         startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
         LocalDateTime endTime = startTime.plusHours(24);
-        List<Sale> saleList = saleService.findByDay(startTime, endTime);
+        List<Sale> saleList = saleService.findByTime(startTime, endTime);
 
         List<SaleNo> saleNoList = new ArrayList<SaleNo>();
         String temp = "";
@@ -400,5 +405,116 @@ public class FarmManagerController {
         Map map = new HashMap();
         map.put("farmSaleExcelList", farmSaleExcelList);
         ExcelComponent.exportToExcel(request, response, outFileName, "农场收入.xls", map);
+    }
+
+    @PostMapping("downloadMonthSaleExcel")
+    // 农场月收入Excel
+    public void downloadMonthSaleExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success"+choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
+        startTime = startTime.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
+        endTime = endTime.withHour(23);
+        endTime = endTime.withMinute(0);
+        endTime = endTime.withSecond(0);
+        endTime = endTime.withNano(0);
+        endTime = endTime.plusHours(1);
+        List<Sale> saleList = saleService.findByTime(startTime, endTime);
+
+        List<SaleNo> saleNoList = new ArrayList<SaleNo>();
+        String temp = "";
+        for (Sale sale : saleList) {
+            if (!sale.getSaleNo().getNo().equals(temp)) {
+                saleNoList.add(sale.getSaleNo());
+                temp = sale.getSaleNo().getNo();
+            }
+        }
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<FarmSaleExcel> farmSaleExcelList = new ArrayList<FarmSaleExcel>();
+        for (SaleNo saleNo : saleNoList) {
+            FarmSaleExcel farmSaleExcel = new FarmSaleExcel();
+            farmSaleExcel.setNo(saleNo.getNo());
+            farmSaleExcel.setInsertTime(format.format(saleNo.getInsertTime()));
+            farmSaleExcel.setTotalPrice(0);
+            for (Sale sale : saleList) {
+                if (sale.getSaleNo().getNo().equals(saleNo.getNo())) {
+                    BigDecimal amount = new BigDecimal(Double.toString(sale.getAmount()));
+                    BigDecimal price = new BigDecimal(Double.toString(sale.getPrice()));
+                    BigDecimal totalPrice = new BigDecimal(Double.toString(farmSaleExcel.getTotalPrice()));
+                    farmSaleExcel.setTotalPrice(amount.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).add(totalPrice).doubleValue());
+                }
+            }
+            farmSaleExcelList.add(farmSaleExcel);
+        }
+
+        Map map = new HashMap();
+        map.put("farmSaleExcelList", farmSaleExcelList);
+        ExcelComponent.exportToExcel(request, response, outFileName, "农场收入.xls", map);
+    }
+
+    @PostMapping("downloadDayPurchaseExcel")
+    // 农场日支出
+    public void downloadDayPurchaseExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success!" + choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = startTime.plusHours(24);
+        List<Purchase> purchaseList = purchaseService.findByTime(startTime, endTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Map map = new HashMap();
+        map.put("purchaseList", purchaseList);
+        map.put("format", format);
+        ExcelComponent.exportToExcel(request, response, outFileName, "农场支出.xls", map);
+    }
+
+    @PostMapping("downloadMonthPurchaseExcel")
+    // 农场月支出
+    public void downloadMonthPurchaseExcel(@RequestBody LocalDateTime choosedDate, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //System.out.println("post success!" + choosedDate);
+
+        choosedDate = choosedDate.plusHours(8);
+
+        String outFileName = "";
+        outFileName = DateTimeFormatter.ofPattern("yyyy-MM").format(choosedDate);
+
+        LocalDateTime startTime = choosedDate.with(TemporalAdjusters.firstDayOfMonth());
+        startTime = startTime.withHour(0);
+        startTime = startTime.withMinute(0);
+        startTime = startTime.withSecond(0);
+        startTime = startTime.withNano(0);
+        LocalDateTime endTime = choosedDate.with(TemporalAdjusters.lastDayOfMonth());
+        endTime = endTime.withHour(23);
+        endTime = endTime.withMinute(0);
+        endTime = endTime.withSecond(0);
+        endTime = endTime.withNano(0);
+        endTime = endTime.plusHours(1);
+        List<Purchase> purchaseList = purchaseService.findByTime(startTime, endTime);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Map map = new HashMap();
+        map.put("purchaseList", purchaseList);
+        map.put("format", format);
+        ExcelComponent.exportToExcel(request, response, outFileName, "农场支出.xls", map);
     }
 }

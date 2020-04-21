@@ -544,7 +544,8 @@ public class FarmStaffController {
     public Map deleteFertilizer(@RequestBody Fertilizer fertilizer) {
         //System.out.println("post success!" + fertilizer.getId() + fertilizer.getName());
 
-        fertilizerService.deleteFertilizer(fertilizer);
+        Fertilizer fertilizer1 = fertilizerService.findByName(fertilizer.getName());
+        fertilizerService.deleteFertilizer(fertilizer1);
 
         return Map.of("message", "删除成功！");
     }
@@ -702,7 +703,8 @@ public class FarmStaffController {
     public Map deleteRestaurantMaterial(@RequestBody RestaurantMaterial restaurantMaterial) {
         //System.out.println("post success!" + restaurantMaterial.getName());
 
-        restaurantMaterialService.delete(restaurantMaterial);
+        RestaurantMaterial restaurantMaterial1 = restaurantMaterialService.findByName(restaurantMaterial.getName());
+        restaurantMaterialService.delete(restaurantMaterial1);
 
         return Map.of("message", "删除成功！");
     }

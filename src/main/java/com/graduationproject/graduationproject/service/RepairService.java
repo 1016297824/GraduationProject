@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,5 +32,11 @@ public class RepairService {
     public void deleteRepair(Repair repair) {
 
         repairRepository.delete(repair);
+    }
+
+    // 通过时间获得报修报损信息
+    public List<Repair> findByTime(LocalDateTime startTime, LocalDateTime endTime) {
+
+        return repairRepository.findByTime(startTime, endTime);
     }
 }
