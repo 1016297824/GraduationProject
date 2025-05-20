@@ -48,7 +48,7 @@ public class Staff {
     @ManyToOne
     private Position position;
 
-    @OneToMany(mappedBy = "staff",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.REMOVE)
     private List<Attendance> attendanceList;
 
     public Staff(String username, String password, String name, String telNumber, String email, String address, String idCardNo, Position position) {
