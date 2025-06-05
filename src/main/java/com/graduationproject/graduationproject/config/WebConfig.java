@@ -48,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/superManager/**");
 
         registry.addInterceptor(farmManagerInterceptor)
-                .addPathPatterns("/api/manager/**");
+                .addPathPatterns("/api/farmManager/**");
 
         registry.addInterceptor(restaurantManagerInterceptor)
                 .addPathPatterns("/api/restaurantManager/**");
